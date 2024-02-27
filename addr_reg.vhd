@@ -26,6 +26,7 @@ begin
                 stored_addr <= i_addr;
             end if;
             if en_add_inc = '1' then
+                -- Quanto è il valore dell'indirizzo da incrementare?
                 stored_addr <= stored_addr + "";
             end if;
         end if;
