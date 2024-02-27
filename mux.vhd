@@ -25,7 +25,7 @@ begin
                     when '1' => o_mem_data <= in_w;
                     when '0' => o_mem_data <= in_c;
                 end case;
-            end if
+            end if;
         end if;
     end process;
 end architecture mux_arch;
