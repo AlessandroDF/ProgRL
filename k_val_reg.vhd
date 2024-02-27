@@ -11,7 +11,7 @@ entity k_val_reg is
         en_k_read   : in std_logic;
         en_k_dec    : in std_logic;
         
-        o_k_val     : out std_logic_vector(15 downto 0);
+        o_k_val     : out std_logic_vector(15 downto 0)
     );
 end entity k_val_reg;
 
