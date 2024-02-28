@@ -1,11 +1,11 @@
-** Progetto di reti logiche.
-*** Politecnico di Milano - anno accademico 2023/2024.
+## Progetto di reti logiche.
+### Politecnico di Milano - anno accademico 2023/2024.
 
-* * Situazione attuale: * *
+**_Situazione attuale:_**
 il progetto realizzato simula correttamente sul testbench fornito. La sintesi avviene correttamente così come la simulazione funzionale post-sintesi. 
 Dall'analisi dei report si evince che sono stati generati 52 flip-flop e nessun latch. Inoltre, sono stati rispettati i requisiti di tempo con uno slack di 16.157ns.
 
-* * Prossimi passi: * *
+**_Prossimi passi:_**
 1. Sistemare alcuni controlli sui segnali di abilitazione del MUX in relazione all'aggiornamento del segnale o_mem_data. Valutare anche i fronti di abilitazione
 della scrittura in memoria.
 
