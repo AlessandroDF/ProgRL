@@ -43,7 +43,7 @@ begin
     process(i_clk, i_rst)
     begin
         if i_rst = '1' then
-            curr_state <= INITIAL;
+            curr_state <= INIT;
         elsif i_clk'event and i_clk = '1' then
             case curr_state is
                 when INIT =>
@@ -54,7 +54,13 @@ begin
                     if i_start = '1' then
                         curr_state <= MEM_READ_FIRST;
                     end if;
-                when MEM_READ_FIRST, MEM_READ =>
+                when MEM_READ_FIRST =>
+                    if i_k = "0000000000" then
+                        curr_state <= DONE;
+                    elsif i_k > "0000000000" then
+                        curr_state <= W_MEM_PREP;  
+                    end if;
+                when MEM_READ =>
                     if i_k = "0000000000" then
                         curr_state <= DONE;
                     elsif i_k > "0000000000" then
@@ -100,6 +106,7 @@ begin
             o_en_mem <= '1';
             o_first_val <= '1';
         elsif curr_state = W_MEM_PREP then
+            o_w_update <= '1';
             o_en_mux <= '1';
             o_sel_mux <= '1';
         elsif curr_state = W_UPDATE then
@@ -116,7 +123,7 @@ begin
         elsif curr_state = MEM_READ then
             o_en_mem <= '1';
         elsif curr_state = DONE then
-            o_done = '1';
+            o_done <= '1';
         end if;
     end process;
 end fsm_arch;

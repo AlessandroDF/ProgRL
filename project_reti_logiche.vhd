@@ -59,7 +59,7 @@ architecture project_reti_logiche_arch of project_reti_logiche is
             en_k_read   : in std_logic;
             en_k_dec    : in std_logic;
             
-            o_k_val     : out std_logic_vector(15 downto 0)
+            o_k_val     : out std_logic_vector(9 downto 0)
         );
     end component k_val_reg;
     component mux is

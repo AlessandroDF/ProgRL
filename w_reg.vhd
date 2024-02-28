@@ -23,13 +23,14 @@ begin
     out_w <= stored_w;
     out_c <= stored_c;
     process(i_clk, i_rst)
-        if i_clk'event AND i_clk = '1' then
+    begin
+        if i_clk'event and i_clk = '1' then
             if i_mem_data = "00000000" then
                 if en_w_update = '1' then
                     if i_first_val = '1' then
                         stored_w <= i_mem_data;
                         stored_c <= "00000";
-                    elsif i_firs_val = '0' then
+                    elsif i_first_val = '0' then
                         -- Non aggiorno stored_w perchè deve mantenere il
                         -- valore aveva precedentemente
                         if stored_c > "00000" then
@@ -38,8 +39,10 @@ begin
                     end if;
                 end if;
             elsif i_mem_data > "00000000" then
-                -- Lascio stored_w al suo valore precedente
-                stored_c <= "11111";
+                if en_w_update = '1' then
+                    stored_w <= i_mem_data;
+                    stored_c <= "11111";
+                end if;
             end if;
         end if;
     end process;
