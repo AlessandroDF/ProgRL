@@ -16,17 +16,17 @@ end entity mux;
 
 architecture mux_arch of mux is
 begin
-    process(i_clk, en_mux, sel_mux)
+    process(i_clk)
     begin
-        o_mem_data <= (others => '0');
+        -- o_mem_data <= (others => '0');
         if i_clk'event AND i_clk = '1' then
-            if en_mux = '1' then
+            --if en_mux = '1' then
                 if sel_mux = '1' then
                     o_mem_data <= in_w;
                 elsif sel_mux = '0' then
                     o_mem_data <= "000" & in_c;
                 end if;
-            end if;
+            --end if;
         end if;
     end process;
 end architecture mux_arch;
