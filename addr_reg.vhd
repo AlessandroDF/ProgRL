@@ -10,7 +10,6 @@ entity addr_reg is
         i_rst       : in std_logic;
         en_add_inc  : in std_logic;
         en_add_read : in std_logic;
-
         o_mem_addr  : out std_logic_vector(15 downto 0)
     );
 end entity addr_reg;

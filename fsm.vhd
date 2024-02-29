@@ -9,7 +9,6 @@ entity fsm is
         i_rst   : in std_logic;
         i_start : in std_logic;
         i_k     : in std_logic_vector(9 downto 0);
-
         o_done      : out std_logic;
         o_en_mux    : out std_logic;
         o_sel_mux   : out std_logic;

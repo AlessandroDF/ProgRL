@@ -10,7 +10,6 @@ entity w_reg is
        i_rst        : in std_logic;
        i_first_val  : in std_logic;
        en_w_update  : in std_logic;
-       
        out_w        : out std_logic_vector(7 downto 0);
        out_c        : out std_logic_vector(4 downto 0)
     );

@@ -9,7 +9,6 @@ entity mux is
         sel_mux     : in std_logic;
         i_clk       : in std_logic;
         i_rst       : in std_logic;
-
         o_mem_data  : out std_logic_vector(7 downto 0)
     );
 end entity mux;

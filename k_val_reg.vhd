@@ -10,7 +10,6 @@ entity k_val_reg is
         i_rst       : in std_logic;
         en_k_read   : in std_logic;
         en_k_dec    : in std_logic;
-        
         o_k_val     : out std_logic_vector(9 downto 0)
     );
 end entity k_val_reg;
