@@ -27,7 +27,7 @@ begin
             if i_mem_data = "00000000" then
                 if en_w_update = '1' then
                     if i_first_val = '1' then
-                        stored_w <= i_mem_data;
+                        stored_w <= "00000000";
                         stored_c <= "00000";
                     elsif i_first_val = '0' then
                         -- Non aggiorno stored_w perchè deve mantenere il

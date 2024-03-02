@@ -28,6 +28,7 @@ architecture fsm_arch of fsm is
         INIT,
         READY,
         MEM_READ_FIRST,
+        W_MEM_PREP_FIRST,
         W_MEM_PREP,
         W_UPDATE,
         C_MEM_PREP,
@@ -37,7 +38,6 @@ architecture fsm_arch of fsm is
     );
     signal curr_state : S;
 begin
-
     -- Funzione di stato prossimo
     process(i_clk, i_rst)
     begin
@@ -57,7 +57,7 @@ begin
                     if i_k = "0000000000" then
                         curr_state <= DONE;
                     elsif i_k > "0000000000" then
-                        curr_state <= W_MEM_PREP;  
+                        curr_state <= W_MEM_PREP_FIRST;  
                     end if;
                 when MEM_READ =>
                     if i_k = "0000000000" then
@@ -65,6 +65,8 @@ begin
                     elsif i_k > "0000000000" then
                         curr_state <= W_MEM_PREP;  
                     end if;
+                when W_MEM_PREP_FIRST =>
+                    curr_state <= W_UPDATE;
                 when W_MEM_PREP =>
                     curr_state <= W_UPDATE;
                 when W_UPDATE =>
@@ -98,24 +100,18 @@ begin
 
         if curr_state = INIT then
             o_done <= '0';
-            o_sel_mux <= '-';
-            o_mem_wr <= '-';
         elsif curr_state = READY then
-            o_sel_mux <= '-';
-            o_mem_wr <= '-';
             o_k_read <= '1';
             o_add_read <= '1';
         elsif curr_state = MEM_READ_FIRST then
-            o_sel_mux <= '-';
             o_en_mem <= '1';
+        elsif curr_state = W_MEM_PREP_FIRST then
             o_first_val <= '1';
+            o_w_update <= '1';
         elsif curr_state = W_MEM_PREP then
-            o_mem_wr <= '-';
-            o_sel_mux <= '-';
             o_w_update <= '1';
         elsif curr_state = W_UPDATE then
             o_en_mux <= '1';
-            o_mem_wr <= '-';
             o_sel_mux <= '1';
         elsif curr_state = C_MEM_PREP then
             o_en_mux <= '1'; -- Aggiunto dopo
@@ -129,11 +125,8 @@ begin
             o_en_mem <= '1';
             o_mem_wr <= '1';
         elsif curr_state = MEM_READ then
-            o_sel_mux <= '-';
             o_en_mem <= '1';
         elsif curr_state = DONE then
-            o_sel_mux <= '-';
-            o_mem_wr <= '-';
             o_done <= '1';
         end if;
     end process;
