@@ -6,7 +6,4 @@ il progetto realizzato simula correttamente sul testbench fornito. La sintesi av
 Dall'analisi dei report si evince che sono stati generati 52 flip-flop e nessun latch. Inoltre, sono stati rispettati i requisiti di tempo con uno slack di 16.157ns.
 
 **_Prossimi passi:_**
-1. Sistemare alcuni controlli sui segnali di abilitazione del MUX in relazione all'aggiornamento del segnale o_mem_data. Valutare anche i fronti di abilitazione
-della scrittura in memoria.
-
-2. Individuare possibili casi critici e generare testbench che li coprano.
+1. Individuare possibili casi critici e generare testbench che li coprano.
