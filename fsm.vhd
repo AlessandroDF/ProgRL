@@ -100,19 +100,28 @@ begin
 
         if curr_state = INIT then
             o_done <= '0';
+            o_sel_mux <= '-';
+            o_mem_wr <= '-';
         elsif curr_state = READY then
             o_k_read <= '1';
             o_add_read <= '1';
+            o_sel_mux <= '-';
+            o_mem_wr <= '-';
         elsif curr_state = MEM_READ_FIRST then
             o_en_mem <= '1';
+            o_sel_mux <= '-';
         elsif curr_state = W_MEM_PREP_FIRST then
             o_first_val <= '1';
+            o_sel_mux <= '-';
+            o_mem_wr <= '-';
             o_w_update <= '1';
         elsif curr_state = W_MEM_PREP then
             o_w_update <= '1';
+            o_mem_wr <= '-';
         elsif curr_state = W_UPDATE then
             o_en_mux <= '1';
             o_sel_mux <= '1';
+            o_mem_wr <= '-';
         elsif curr_state = C_MEM_PREP then
             o_en_mux <= '1'; -- Aggiunto dopo
             o_add_inc <= '1';
@@ -126,8 +135,11 @@ begin
             o_mem_wr <= '1';
         elsif curr_state = MEM_READ then
             o_en_mem <= '1';
+            o_sel_mux <= '-';
         elsif curr_state = DONE then
             o_done <= '1';
+            o_sel_mux <= '-';
+            o_mem_wr <= '-';
         end if;
     end process;
 end fsm_arch;
