@@ -7,3 +7,4 @@ Dall'analisi dei report si evince che sono stati generati 52 flip-flop e nessun 
 
 **_Prossimi passi:_**
 1. Individuare possibili casi critici e generare testbench che li coprano.
+2. Pensare alla FSM come macchina di Mealy: in questo modo le uscite sono sugli archi dell'automa e non sugli stati => Questo mi consente di avere per uno stesso stato (MEM_PREP) il flag di "First value" con valori diversi in base allo stato da cui provengo
