@@ -15,9 +15,11 @@ end entity mux;
 
 architecture mux_arch of mux is
 begin
-    process(i_clk)
+    process(i_clk, i_rst)
     begin
-        -- o_mem_data <= (others => '0');
+        if i_rst = '1' then
+            o_mem_data <= (others => '0');
+        end if;
         if i_clk'event AND i_clk = '1' then
             if en_mux = '1' then -- Modifica effettuata post-funzionamento (1)
                 if sel_mux = '1' then

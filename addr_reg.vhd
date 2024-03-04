@@ -20,6 +20,9 @@ begin
     o_mem_addr <= stored_addr;
     process(i_rst, i_clk)
     begin
+        if i_rst = '1' then
+            stored_addr <= (others => '0');
+        end if;
         if i_clk'event AND i_clk = '1' then
             if en_add_read = '1' then
                 stored_addr <= i_addr;

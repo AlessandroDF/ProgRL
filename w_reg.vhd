@@ -23,6 +23,10 @@ begin
     out_c <= stored_c;
     process(i_clk, i_rst)
     begin
+        if i_rst = '1' then
+            stored_w <= (others => '0');
+            stored_c <= (others => '0');
+        end if;
         if i_clk'event and i_clk = '1' then
             if i_mem_data = "00000000" then
                 if en_w_update = '1' then
