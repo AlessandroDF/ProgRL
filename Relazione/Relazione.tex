@@ -1,0 +1,133 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage{circuitikz}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{tikz}
+\usepackage{array}
+\definecolor{lightgray}{cmyk}{0,0,0,0.19}
+\usetikzlibrary{positioning}
+\begin{document}
+	
+\begin{titlepage}
+	\centering
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.5\textwidth]{logo_polimi.png} 
+	\end{figure}
+	\vspace{1cm}
+		\fbox{
+			\begin{minipage}{\linewidth}
+				\centering
+				\vspace{1cm}
+				{\LARGE\bfseries \textsc{Prova Finale}\par}
+				{\LARGE\bfseries \textsc{Progetto di Reti Logiche}\par}
+				\vspace{0.1cm}
+				{\Large\itshape Prof. William Fornaciari \par}
+				\vspace{0.5cm}
+				{\Large\bfseries \textsc{Corso di laurea in Ingegneria Informatica}\par}
+				{\large Anno accademico: 2023/2024 \par}
+				\vspace{0.5cm}
+				{\large\bfseries Alessandro Del Fatti\par}
+				{\large Codice persona: 10790553 \par}
+				\vspace{1cm}
+			\end{minipage}
+		}
+	\vfill
+	{\large Consegna del 01/04/2024\par}
+	
+\end{titlepage}
+
+\section{Introduzione}
+Il sistema progettato ha come scopo quello di ricevere in ingresso dei valori interi positivi, valutare la loro attendibilità e generare, in modo coerente con il valore letto, un ulteriore valore numerico che possa descriverne la credibilità. Si pensi, ad esempio, ad un sistema che opera in questo modo:
+\begin{enumerate}
+	\item Un sensore effettua una serie di misurazioni: sia $K$ il numero di misurazioni effettuate.
+	\item Le $K$ misurazioni vengono mantenute in delle celle di memoria. Sia W il contenuto di ciascuna cella di memoria rappresentante una misurazione.
+	\item Per ciascuna delle $K$ misurazioni si vuole dire se il valore memorizzato è attendibile oppure no. Si considerano attendibili valori di $W>0$ e non attendibili valori di $W=0$.
+	\item Quindi, per ciascuna misurazione, si assegna un valore di credibilità $C$ secondo queste regole:
+	\begin{enumerate}
+		\item Se $W_i \neq 0$, il corrispondente valore di credibilità $C_i$ sarà massimo, cioè $C_i = 31$
+		\item Se $W_i = 0$, la misurazione è da considerarsi non valida. Si sostituisce quindi il valore di $W_i$ con quello di $W_{i-1}$ e si pone $C_i$ a $C_{i-1} - 1$, se $C_{i-1} \geq 1$ altrimenti si pone $C_i = 0$. Se già il primo valore letto è nullo, cioè $W_0 = 0$, non si può «\textit{correggere}» con la lettura precedente e si mantengono $W_0= 0$ e  $C_0 = 0$.
+	\end{enumerate}
+\end{enumerate}
+Il seguente schema esplicita in modo generale il principio di funzionamento del sistema e dove si colloca il componente progettato.
+\begin{center}
+\begin{tikzpicture}[
+	sensor/.style={circle, draw=gray, fill=lightgray, minimum width=0.5cm},
+	component/.style={rectangle, draw, rounded corners, minimum width=1.5cm, minimum height=1cm},
+	ram/.style={rectangle, draw=gray, fill=lightgray, rounded corners, minimum width=1.5cm, minimum height=1cm}, auto, node distance=6cm]
+	\node[sensor] (S) at (0,0) {S};
+	\node[ram, right of=S] (RAM) {Memoria};
+	\node[component, right of=RAM](C) {Componente progettato};
+	%\node[below =0.8cm of S] {\textsc{Sensore}};
+	%\node[below =0.5cm of RAM] {\textsc{Memoria}};
+	%\node[below =0.5cm of C] {\textsc{Componente Progettato}};
+	\path[-latex, black] (S) edge[] node {Misurazioni effettuate} (RAM);
+	\path[-latex, black] (RAM) edge[bend right] node[swap]{Misurazioni memorizzate} (C);
+	\path[-latex, black] (C) edge[bend right] node[swap] {Dati elaborati} (RAM);
+\end{tikzpicture}
+\end{center}
+Un esempio di elaborazione, con valori numerici, che racchiude le casistiche di input descritte è il seguente: 
+\begin{table}[h]
+	\centering
+	\begin{tabular}{c|c||c}
+		\textbf{Indirizzo}&\textbf{Valore pre-elaborazione}&\textbf{Valore post-elaborazione}\\
+		\hline
+		$ADD_1$&0&0\\
+		$ADD_2$&0&0\\
+		$ADD_3$&192&192\\
+		$ADD_4$&0&31\\
+		$ADD_5$&0&192\\
+		$ADD_6$&0&30\\
+	\end{tabular}
+	\caption{Situazione della memoria pre e post-elaborazione}
+\end{table}
+\paragraph{Passo 1:} Elaborazione del primo valore
+\begin{center}
+\begin{tikzpicture}[
+	component/.style={rectangle, draw, rounded corners, minimum width=1cm, minimum height=1cm},
+	ram/.style={rectangle, draw=gray, fill=lightgray, rounded corners, minimum width=1cm, minimum height=1cm}, auto, node distance=6cm]
+	\node[ram, right of=S] (RAM) {RAM - $ADD_1$};
+	\node[component, right of=RAM](C) {Componente progettato};
+	\path[-latex, black] (RAM) edge[bend right] node[swap]{$W_{ADD1}=0$} (C);
+	\path[-latex, black] (C) edge[bend right] node[swap] {$W_{ADD1}=0,\quad C_{ADD2}=0$} (RAM);
+\end{tikzpicture}
+\end{center}
+Leggo 0 dalla memoria. Si tratta del primo valore letto, quindi non posso «correggerlo» con quello letto al passo precedente.
+\clearpage
+\paragraph{Passo 2:} Elaborazione del secondo valore
+\begin{center}
+\begin{tikzpicture}[
+	component/.style={rectangle, draw, rounded corners, minimum width=1.5cm, minimum height=1cm},
+	ram/.style={rectangle, draw=gray, fill=lightgray, rounded corners, minimum width=1.5cm, minimum height=1cm}, auto, node distance=6cm]
+	\node[ram, right of=S] (RAM) {RAM - $ADD_3$};
+	\node[component, right of=RAM](C) {Componente progettato};
+	\path[-latex, black] (RAM) edge[bend right] node[swap]{$W_{ADD3}=192$} (C);
+	\path[-latex, black] (C) edge[bend right] node[swap] {$W_{ADD3}=192,\quad C_{ADD4}=31$} (RAM);
+\end{tikzpicture}
+\end{center}
+Leggo 192 dalla memoria. Si tratta di un valore maggiore di 0, quindi lo considero attendibile e imposto al massimo il valore di credibilità $C=31$.
+\paragraph{Passo 3:} Elaborazione del terzo valore
+\begin{center}
+\begin{tikzpicture}[
+	component/.style={rectangle, draw, rounded corners, minimum width=1.5cm, minimum height=1cm},
+	ram/.style={rectangle, draw=gray, fill=lightgray, rounded corners, minimum width=1.5cm, minimum height=1cm}, auto, node distance=6cm]
+	\node[ram, right of=S] (RAM) {RAM - $ADD_5$};
+	\node[component, right of=RAM](C) {Componente progettato};
+	\path[-latex, black] (RAM) edge[bend right] node[swap]{$W_{ADD5}=0$} (C);
+	\path[-latex, black] (C) edge[bend right] node[swap] {$W_{ADD5}=192,\quad C_{ADD6}=30$} (RAM);
+\end{tikzpicture}
+\end{center}
+Leggo 0 dalla memoria. Non si tratta del primo valore letto, quindi non lo considero attendibile e riscrvo in memoria il valore di $W$ letto al punto precedente, ma abbasso il livello di credibilità: $C=30$.
+\\
+\\
+I valori numerici di questo esempio sono coerenti con le specifiche: $K$, cioè il numero di letture che il componente deve effettuare, è esprimibile con 10 bit, $W$, il dato in memoria, è una parola da 8 bit e gli indirizzi di memoria sono da 16 bit.
+\section{Architettura}
+\include{schema_circ.tex}
+Schema architetturale e degli stati della FSM. Per ogni componente breve descrizione e implementazione in VHDL.
+\section{Risultati sperimentali}
+Report timing e utilization di Vivado. Metodologia di testing ed elenco dei testbench.
+\section{Conclusioni}
+Cosa scrivo di bello qui????
+\end{document}

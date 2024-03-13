@@ -1,0 +1,86 @@
+\begin{figure}[!ht]
+	\centering
+	\resizebox{1\textwidth}{!}{%
+		\begin{circuitikz}
+			\tikzstyle{every node}=[font=\large]
+			\draw  (5,12.75) rectangle  node {\large K-REG} (8.75,10.25);
+			\draw  (5,17.75) rectangle  node {\large ADDR-REG} (8.75,15.25);
+			\draw  (5,7.75) rectangle  node {\large W-REG} (8.75,1.5);
+			\draw  (12.5,6.5) rectangle  node {\large MUX} (15,2.75);
+			\node [font=\large] at (13,6) {0};
+			\node [font=\large] at (13,3.25) {1};
+			\draw [->, >=Stealth] (1.25,16.5) -- (5,16.5)node[pos=0.5, fill=white]{16};
+			\draw [->, >=Stealth] (1.25,11.5) -- (5,11.5)node[pos=0.5, fill=white]{10};
+			\draw [->, >=Stealth] (1.25,4.75) -- (5,4.75)node[pos=0.5, fill=white]{8};
+			\draw [->, >=Stealth] (8.75,5.75) -- (12.5,5.75)node[pos=0.5, fill=white]{8};
+			\draw [->, >=Stealth] (8.75,3.25) -- (12.5,3.25)node[pos=0.5, fill=white]{5};
+			\draw [->, >=Stealth] (15,4.75) -- (18.75,4.75)node[pos=0.5, fill=white]{8};
+			\draw  (23.75,14) rectangle  node {\large FSM} (28.75,7.75);
+			\draw [->, >=Stealth] (28.75,12.75) -- (32.5,12.75);
+			\draw [->, >=Stealth] (28.75,9.25) -- (32.5,9.25);
+			\draw [->, >=Stealth] (28,5.25) -- (28,7.75);
+			\draw [->, >=Stealth] (26.75,5.25) -- (26.75,7.75);
+			\node [font=\large] at (26.75,4.75) {CLK};
+			\node [font=\large] at (28,4.75) {RST};
+			\draw [->, >=Stealth] (28.75,11) -- (32.5,11);
+			\draw [short] (27.5,14) -- (27.5,20.25);
+			\draw [short] (27.5,20.25) -- (6.25,20.25);
+			\draw [->, >=Stealth] (6.25,20.25) -- (6.25,17.75);
+			\draw [short] (26.25,14) -- (26.25,19);
+			\draw [short] (26.25,19) -- (7.5,19);
+			\draw [->, >=Stealth] (7.5,19) -- (7.5,17.75);
+			\draw [->, >=Stealth] (8.75,10.75) -- (23.75,10.75)node[pos=0.5, fill=white]{10};
+			\draw [short] (25,14) -- (25,14.75);
+			\draw [->, >=Stealth] (20,12) -- (23.75,12);
+			\draw [short] (24.25,7.75) -- (24.25,1.5);
+			\draw [short] (24.25,1.5) -- (14.5,1.5);
+			\draw [->, >=Stealth] (14.5,1.5) -- (14.5,2.75);
+			\draw [short] (25,7.75) -- (25,0.25);
+			\draw [short] (25,0.25) -- (13,0.25);
+			\draw [->, >=Stealth] (13,0.25) -- (13,2.75);
+			\draw [->, >=Stealth] (5.25,9) -- (5.25,10.25);
+			\draw [->, >=Stealth] (6.25,9) -- (6.25,10.25);
+			\node [font=\large] at (5,8.75) {     CLK};
+			\node [font=\large] at (6.5,8.75) {};
+			\draw [->, >=Stealth] (5.25,14) -- (5.25,15.25);
+			\draw [->, >=Stealth] (6.25,14) -- (6.25,15.25);
+			\node [font=\large] at (5,13.75) {     CLK};
+			\node [font=\large] at (6.25,13.75) { RST};
+			\node [font=\large] at (6.25,8.75) { RST};
+			\draw [->, >=Stealth] (6.25,0.25) -- (6.25,1.5);
+			\draw [->, >=Stealth] (5.25,0.25) -- (5.25,1.5);
+			\node [font=\large] at (5,0) {     CLK};
+			\node [font=\large] at (6.25,0) {RST};
+			\draw [short] (25,14.75) -- (7.5,14.75);
+			\draw [->, >=Stealth] (7.5,14.75) -- (7.5,12.75);
+			\draw [short] (23.75,13.75) -- (8.25,13.75);
+			\draw [->, >=Stealth] (8.25,13.75) -- (8.25,12.75);
+			\draw [short] (23.75,9.5) -- (7.5,9.5);
+			\draw [->, >=Stealth] (7.5,9.5) -- (7.5,7.75);
+			\draw [short] (23.75,8.75) -- (8.25,8.75);
+			\draw [->, >=Stealth] (8.25,8.75) -- (8.25,7.75);
+			\node [font=\large] at (20.75,12.25) {START};
+			\node [font=\large] at (20.5,11) {K-IN};
+			\node [font=\large] at (13.75,20.5) {EN-ADD-INC};
+			\node [font=\large] at (14,19.25) {EN-ADD-READ};
+			\node [font=\large] at (11.75,14) {EN-K-READ};
+			\node [font=\large] at (11.75,15) {EN-K-DEC};
+			\node [font=\large] at (18.25,1.75) {EN-MUX};
+			\node [font=\large] at (18.25,0.5) {SEL-MUX};
+			\node [font=\large] at (12,9.75) {EN-W-UPDATE};
+			\node [font=\large] at (11.5,9) {FIRST-VAL};
+			\node [font=\large] at (9.5,6) {OUT-W};
+			\node [font=\large] at (9.5,3.5) {OUT-C};
+			\node [font=\large] at (1.5,16.75) {ADDR};
+			\node [font=\large] at (1.25,11.75) {K};
+			\node [font=\large] at (1.25,5) {I-MEM-DATA};
+			\node [font=\large] at (20.25,4.75) {O-MEM-DATA};
+			\draw [->, >=Stealth] (8.75,16.5) -- (12,16.5)node[pos=0.5, fill=white]{16};
+			\node [font=\large] at (13.75,16.5) {O-MEM-ADDR};
+			\node [font=\large] at (29.7,13) {DONE};
+			\node [font=\large] at (30,11.25) {MEM-EN};
+			\node [font=\large] at (30,9.5) {MEM-WR};
+		\end{circuitikz}
+	}
+	\caption{Schema a blocchi del componente progettato}
+\end{figure}
