@@ -20,32 +20,32 @@ architecture tb_reset_during_read_arch of tb_reset_during_read is
 
     type ram_type is array (65535 downto 0) of std_logic_vector(7 downto 0);
     signal RAM : ram_type := (OTHERS => "00000000");
-
+          
+                                           
+    signal memory_control : std_logic := '0';
+  
     constant SCENARIO_LENGTH_1 : integer := 16#023#;
+    constant SCENARIO_ADDRESS_1 : integer := 16#0064#;
     type scenario_type_1 is array (0 to SCENARIO_LENGTH_1*2-1) of integer;
 
     signal scenario_input_1 : scenario_type_1 := (16#33#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#);
     signal scenario_full_1  : scenario_type_1 := (16#33#, 16#1F#, 16#33#, 16#1E#, 16#33#, 16#1D#, 16#33#, 16#1C#, 16#33#, 16#1B#, 16#33#, 16#1A#, 16#33#, 16#19#, 16#33#, 16#18#, 16#33#, 16#17#, 16#33#, 16#16#, 16#33#, 16#15#, 16#33#, 16#14#, 16#33#, 16#13#, 16#33#, 16#12#, 16#33#, 16#11#, 16#33#, 16#10#, 16#33#, 16#0F#, 16#33#, 16#0E#, 16#33#, 16#0D#, 16#33#, 16#0C#, 16#33#, 16#0B#, 16#33#, 16#0A#, 16#33#, 16#09#, 16#33#, 16#08#, 16#33#, 16#07#, 16#33#, 16#06#, 16#33#, 16#05#, 16#33#, 16#04#, 16#33#, 16#03#, 16#33#, 16#02#, 16#33#, 16#01#, 16#33#, 16#00#, 16#33#, 16#00#, 16#33#, 16#00#, 16#33#, 16#00#);
-
-    constant SCENARIO_ADDRESS_1 : integer := 16#0064#;
-    
-    signal memory_control : std_logic := '0';
     
     constant SCENARIO_LENGTH_2 : integer := 16#021#;
+    constant SCENARIO_ADDRESS_2 : integer := 16#0214#;
     type scenario_type_2 is array (0 to SCENARIO_LENGTH_2*2-1) of integer;
 
     signal scenario_input_2 : scenario_type_2 := (16#00#, 16#00#, 16#FF#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#89#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#6F#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#B5#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#F6#, 16#00#, 16#7C#, 16#00#, 16#00#, 16#00#, 16#5D#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#);
     signal scenario_full_2  : scenario_type_2 := (16#00#, 16#00#, 16#FF#, 16#1F#, 16#FF#, 16#1E#, 16#FF#, 16#1D#, 16#89#, 16#1F#, 16#89#, 16#1E#, 16#89#, 16#1D#, 16#89#, 16#1C#, 16#89#, 16#1B#, 16#89#, 16#1A#, 16#89#, 16#19#, 16#89#, 16#18#, 16#89#, 16#17#, 16#6F#, 16#1F#, 16#6F#, 16#1E#, 16#6F#, 16#1D#, 16#6F#, 16#1C#, 16#B5#, 16#1F#, 16#B5#, 16#1E#, 16#B5#, 16#1D#, 16#B5#, 16#1C#, 16#B5#, 16#1B#, 16#B5#, 16#1A#, 16#F6#, 16#1F#, 16#7C#, 16#1F#, 16#7C#, 16#1E#, 16#5D#, 16#1F#, 16#5D#, 16#1E#, 16#5D#, 16#1D#, 16#5D#, 16#1C#, 16#5D#, 16#1B#, 16#5D#, 16#1A#, 16#5D#, 16#19#);
 
-    constant SCENARIO_ADDRESS_2 : integer := 16#0214#;
-    
     constant SCENARIO_LENGTH_3 : integer := 16#023#;
+    constant SCENARIO_ADDRESS_3 : integer := 16#0064#;
     type scenario_type_3 is array (0 to SCENARIO_LENGTH_3*2-1) of integer;
 
     signal scenario_input_3 : scenario_type_3 := (16#33#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#, 16#00#);
     signal scenario_full_3  : scenario_type_3 := (16#33#, 16#1F#, 16#33#, 16#1E#, 16#33#, 16#1D#, 16#33#, 16#1C#, 16#33#, 16#1B#, 16#33#, 16#1A#, 16#33#, 16#19#, 16#33#, 16#18#, 16#33#, 16#17#, 16#33#, 16#16#, 16#33#, 16#15#, 16#33#, 16#14#, 16#33#, 16#13#, 16#33#, 16#12#, 16#33#, 16#11#, 16#33#, 16#10#, 16#33#, 16#0F#, 16#33#, 16#0E#, 16#33#, 16#0D#, 16#33#, 16#0C#, 16#33#, 16#0B#, 16#33#, 16#0A#, 16#33#, 16#09#, 16#33#, 16#08#, 16#33#, 16#07#, 16#33#, 16#06#, 16#33#, 16#05#, 16#33#, 16#04#, 16#33#, 16#03#, 16#33#, 16#02#, 16#33#, 16#01#, 16#33#, 16#00#, 16#33#, 16#00#, 16#33#, 16#00#, 16#33#, 16#00#);
 
-    constant SCENARIO_ADDRESS_3 : integer := 16#0064#;
+    
     
     component project_reti_logiche is
         port (
@@ -158,15 +158,18 @@ begin
         
         tb_start <= '1';
         
-        -- Set reset = 1
-        wait for 200 ns;
+        -- Lettura iniziata, la faccio andare per qualche ciclo di clock
+        wait for 150 ns;
         
+        -- Resetto il componente        
         tb_rst <= '1';
-        
-        wait for 1 ns;
+           
+        wait for 25 ns;
         
         tb_start <= '0';
-
+        
+        wait for 25 ns;
+        
         -- Second read: prepare memory
         tb_rst <= '0';
         memory_control <= '0';  -- Memory controlled by the testbench
@@ -251,20 +254,17 @@ begin
         wait until falling_edge(tb_clk);
         assert tb_done = '0' report "TEST FALLITO o_done !=0 after reset before start" severity failure;
         
+        -- Attendo il primo segnale di start
         wait until rising_edge(tb_start);
 
+        -- Attendo il segnale di reset
         wait until tb_rst = '1';
-        
-        -- Attendo un attimo che l'aggiornamento dei segnali si propaghi
-        wait for 1 ns;
-        
-        assert tb_start = '0' report "TEST FALLITO: i_start != 0 after reset";
-        
+                
         wait until falling_edge(tb_start);
         
         assert tb_o_mem_en = '0' or tb_o_mem_we = '0' report "TEST FALLITO o_mem_en !=0 memory should not be written during reset." severity failure;
 
-        -- Il segnale di done deve essere a 0 perchè non ho finito la lettura
+        -- Il segnale di done deve essere a 0 perchè non ho finito la lettura: ho dato il reset durante la lettura
         assert tb_done = '0' report "TEST FALLITO o_done != 0 --- No read completed so far!" severity failure;
 
         wait until rising_edge(tb_start);
