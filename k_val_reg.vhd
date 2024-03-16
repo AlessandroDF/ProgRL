@@ -22,8 +22,7 @@ begin
     begin
         if i_rst = '1' then
             stored_k <= (others => '0');
-        end if;
-        if i_clk'event AND i_clk = '1' then
+        elsif i_clk'event AND i_clk = '1' then
             if en_k_read = '1' then
                 stored_k <= i_k;
                 -- Quando non lo aggiorno più, essendo un segnale

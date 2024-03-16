@@ -22,8 +22,7 @@ begin
     begin
         if i_rst = '1' then
             stored_addr <= (others => '0');
-        end if;
-        if i_clk'event AND i_clk = '1' then
+        elsif i_clk'event AND i_clk = '1' then
             if en_add_read = '1' then
                 stored_addr <= i_addr;
             end if;
