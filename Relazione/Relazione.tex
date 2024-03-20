@@ -49,8 +49,6 @@
 		\includegraphics[scale=0.35]{logo_polimi.png} 
 	\end{figure}
 	\vspace{1cm}
-		\fbox{
-			\begin{minipage}{\linewidth}
 				\centering
 				\vspace{1cm}
 				{\LARGE\bfseries \textsc{Prova Finale}\par}
@@ -64,8 +62,6 @@
 				{\large\bfseries Alessandro Del Fatti\par}
 				{\large Codice persona: 10790553 \par}
 				\vspace{1cm}
-			\end{minipage}
-		}
 	\vfill
 	{\large Consegna del 01/04/2024\par}
 	
@@ -180,7 +176,7 @@ entity addr_reg is
 	);
 end entity addr_reg;
 \end{lstlisting}
-In cui, \lstinline[style=vhdl]|i_addr| è un vettore di bit inizializzato con il primo indirizzo di memoria dal quale iniziare l'elaborazione e \lstinline[style=vhdl]|o_mem_addr| è l'indirizzo corrente e indica qual è la cella di memoria da leggere o scrivere ; viene di volta in volta incrementato (avendo definito un opportuno segnale nell'architettura, dato che essendo \lstinline[style=vhdl]|o_mem_addr| un output non può essere scritto) .
+In cui, \lstinline[style=vhdl]|i_addr| è un vettore di bit inizializzato con il primo indirizzo di memoria dal quale iniziare l'elaborazione e \lstinline[style=vhdl]|o_mem_addr| è l'indirizzo corrente e indica qual è la cella di memoria da leggere o scrivere ; viene di volta in volta incrementato (avendo definito un opportuno segnale nell'architettura, dato che essendo \lstinline[style=vhdl]|o_mem_addr| un output non può essere scritto).
 \begin{lstlisting}[language=vhdl]
 entity k_val_reg is
 	port(
@@ -222,6 +218,12 @@ entity mux is
 end entity mux;
 \end{lstlisting}
 In cui, \lstinline[style=vhdl]|in_w| e \lstinline[style=vhdl]|in_c| sono i segnali provenienti dal blocco W-REG e \lstinline[style=vhdl]|o_mem_data| è il vettore da 8 bit che deve essere scritto in memoria assumendo, alternativamente, un valore di $W$ o di $C$. Nel secondo caso, il multiplexer si occupa anche di fare un'operazione di padding per portare \lstinline[style=vhdl]|in_c|, vettore da 5 bit, su \lstinline[style=vhdl]|o_mem_data|, vettore da 8 bit.
+\paragraph{}
+Tutte le architetture di questi quattro componenti sono formate da un unico process che ha i soli segnali di clock e di reset nella sensitivity list. L'architettura della macchina a stati, descritta nel seguito, è invece formata da due process differenti:
+\begin{itemize}
+	\item Un process che descrive la \textbf{funzione di stato prossimo}, sequenziale, e ha nella sensitivity list i segnali di clock e di reset;
+	\item Un pocess che descrive la \textbf{funzione di uscita}, combinatorio, e ha nella sensitity list il segnale di stato corrente.
+\end{itemize}
 \subsection{Macchina a stati finiti}
 Omettendo di riportare il codice VHDL della entity dell'FSM, di seguito è invece schematizzato il comportamento di transizione tra i diversi stati della macchina:
 \begin{figure}[h]
@@ -281,7 +283,94 @@ Lo stato di W\_MEM\_PREP si raggiunge se $K > 0$.  Abilita l'uscita o\_w\_update
 \subsubsection{DONE}
 Lo stato di DONE si raggiunge quando $K = 0$, cioè quando l'elaborazione è terminata. Si rimane in questo stato fino a che start rimane alto. Non appena start viene portato a 0, la macchina torna di nuovo in uno stato di READY.
 \section{Risultati sperimentali}
-Report timing e utilization di Vivado. Metodologia di testing ed elenco dei testbench.
+Per testare il componente progettato, come primo passo, è stato sottoposto al testbench fornito insieme alla specifica. Completata correttamente la sintesi e terminate le due simulazioni, behavioral e post-syntesis sono stati generati i \lstinline|report_timing| e \lstinline|report_utilization| con i seguenti risultati:
+\begin{itemize}
+	\item \lstinline|Slack (MET):	15.847ns  (required time - arrival time)|. Sono quindi stati rispettati i vincoli temporali imposti dalla specifica.
+	\item \lstinline|Register as Flip Flop: 51|, \lstinline|Register as Latch: 0|. Da cui si nota che sono stati utilizzati 51 flip-flop e nessun latch.
+\end{itemize}
+Terminata senza errori la simulazione del testbench fornito, una secondo passo è stato quello di ricostruire i testbench sulla base degli esempi dello stato della memoria presenti nel file delle specifiche. Come terzo ed ultimo passo nella fase di test sono stati individuati dei casi limite legati sia ai valori assumibili dai vari segnali, sia al comportamento del componente.
+\paragraph{}
+Di seguito, per ciascun test effettuato, sono descritte le peculiarità che hanno portato alla scelta di sottoporre il componente a tale test.
+\subsection{Test basati sugli esempi delle specifiche}
+\subsubsection{Esempi 1, 4, 5}
+\begin{itemize}
+	\item $K=10$ e $K=16$ elaborazioni da eseguire
+	\item Primo valore non nullo
+	\item Presenza di valori nulli interni alla sequenza
+\end{itemize}
+\subsubsection{Esempio 2}
+\begin{itemize}
+	\item $K=35$ elaborazioni da eseguire
+	\item Primo valore non nullo
+	\item Presenza di valori nulli interni alla sequenza. In particolare sono presenti più di 31 valori nulli. Il test va quindi a verificare che, raggiunto un valore di crebilità pari a 0, il componente continua a comportarsi correttamente lasciando nullo il valore di credibilità.
+\end{itemize}
+\subsubsection{Esempio 3}
+\begin{itemize}
+	\item $K=33$ elaborazioni da eseguire
+	\item Primo valore nullo. Il test va quindi a verificare che, letto il primo 0, il valore che viene scritto in memoria sia 0 sia per la parola $W$, sia per la credibilità.
+	\item Presenza di valori nulli interni alla sequenza
+\end{itemize}
+\subsection{Test su casi limite - valori}
+\subsubsection{Test 1}
+\begin{itemize}
+	\item $K=10$ elaborazioni da eseguire
+	\item Primo valore non nullo
+	\item Non ci sono valori nulli interni alla sequenza
+\end{itemize}
+L'obiettivo di questo test è quello di verificare che il comportamento del componente si mantenga corretto qualora i valori di $W$ siano tutti massimi, ovvero in memoria ci siano solo valori pari a 255.
+\subsubsection{Test 2}
+\begin{itemize}
+	\item $K=32$ elaborazioni da eseguire
+	\item Primo valore nullo
+	\item Presenza di valori nulli interni alla sequenza
+\end{itemize}
+L'obiettivo di questo test è quello di verificare che il comportamento del componente si mantenga corretto qualora i valori di $W$ siano tutti minimi, ovvero in memoria ci siano solo valori pari a 0.
+\subsubsection{Test 3}
+\begin{itemize}
+	\item $K=1$ elaborazioni da eseguire
+	\item Valore non nullo
+\end{itemize}
+L'obiettivo di questo test è quello di verificare che il comportamento del componente si mantenga corretto qualora il numero di elaborazioni da eseguire sia minimo, ovvero $K=1$.
+\subsubsection{Test 4}
+\begin{itemize}
+	\item $K=1023$ elaborazioni da eseguire
+	\item Valori della sequenza generati in modo pseudo-casuale
+\end{itemize}
+L'obiettivo di questo test è quello di verificare che il comportamento del componente si mantenga corretto qualora il numero di elaborazioni da eseguire sia massimo, ovvero $K=1023$.
+\subsubsection{Test 5}
+\begin{itemize}
+	\item $K=10$
+	\item Indirizzo di partenza $ADD=0$
+	\item Valori della sequenza generati in modo pseudo-casuale
+\end{itemize}
+L'obiettivo di questo test è quello di verificare che il comportamento del componente si mantenga corretto qualora l'indirizzo di partenza da cui partire con l'elaborazione sia 0.
+\subsection{Test su casi limite - comportamenti}
+\subsubsection{Test 1}
+\begin{itemize}
+	\item Più segnali di start forniti
+	\item Indirizzi di partenza uguali per due sequenze
+	\item Valori delle sequenze generati in modo pseudo-casuale
+\end{itemize}
+Obiettivo di questo test è quello di permettere al componente di effettuare più elaborazioni senza passare dallo stato di reset, se non per la prima sequenza. Il componente devi quindi completare le elaborazioni di tutte le sequenze.
+\subsubsection{Test 2}
+\begin{itemize}
+	\item Più segnali di start forniti
+	\item Segnale di reset fornito durante una elaborazione
+	\item Valori delle sequenze generati in modo pseudo-casuale
+\end{itemize}
+Obiettivo di questo test è quello di permettere al componente di effettuare più elaborazioni e, durante una elaborazione viene fornito il segnale di reset.
+\subsubsection{Test 3}
+\begin{itemize}
+	\item Segnale di start e di reset contemporaneamente alti
+	\item Valori delle sequenze generati in modo pseudo-casuale
+\end{itemize}
+Obiettivo di questo test è quello di verificare che, mentre il segnale di reset è alto, nel caso in cui venga fornito il segnale di start, il componente non inizi l'elaborazione ma rimanga in uno stato di reset.
+\subsubsection{Test 4}
+\begin{itemize}
+	\item Più segnali di reset forniti
+	\item Valori delle sequenze generati in modo pseudo-casuale
+\end{itemize}
+Obiettivo di questo test è quello di verificare che il compoente si comporti in modo corretto qualora vengano forniti segnali di reset in diversi stati dell'elaborazione (durante l'elaborazione, come per il test 2 e post-elaborazione).
 \section{Conclusioni}
 Cosa scrivo di bello qui????
 \end{document}
