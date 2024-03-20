@@ -3,18 +3,50 @@
 \usepackage{graphicx}
 \usepackage[T1]{fontenc}
 \usepackage{circuitikz}
+\usepackage{svg}
 \usepackage[a4paper, margin=2.5cm]{geometry}
 \usepackage{tikz}
 \usepackage{array}
 \definecolor{lightgray}{cmyk}{0,0,0,0.19}
 \usetikzlibrary{positioning}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{color}
+\usepackage{rotating}
+\usepackage{tabularray}
+
+\definecolor{Mercury}{rgb}{0.89,0.89,0.89}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{vhdl}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+\lstset{style=vhdl}
 \begin{document}
 	
 \begin{titlepage}
 	\centering
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=0.5\textwidth]{logo_polimi.png} 
+		\includegraphics[scale=0.35]{logo_polimi.png} 
 	\end{figure}
 	\vspace{1cm}
 		\fbox{
@@ -60,9 +92,6 @@ Il seguente schema esplicita in modo generale il principio di funzionamento del 
 	\node[sensor] (S) at (0,0) {S};
 	\node[ram, right of=S] (RAM) {Memoria};
 	\node[component, right of=RAM](C) {Componente progettato};
-	%\node[below =0.8cm of S] {\textsc{Sensore}};
-	%\node[below =0.5cm of RAM] {\textsc{Memoria}};
-	%\node[below =0.5cm of C] {\textsc{Componente Progettato}};
 	\path[-latex, black] (S) edge[] node {Misurazioni effettuate} (RAM);
 	\path[-latex, black] (RAM) edge[bend right] node[swap]{Misurazioni memorizzate} (C);
 	\path[-latex, black] (C) edge[bend right] node[swap] {Dati elaborati} (RAM);
@@ -88,7 +117,7 @@ Un esempio di elaborazione, con valori numerici, che racchiude le casistiche di 
 \begin{tikzpicture}[
 	component/.style={rectangle, draw, rounded corners, minimum width=1cm, minimum height=1cm},
 	ram/.style={rectangle, draw=gray, fill=lightgray, rounded corners, minimum width=1cm, minimum height=1cm}, auto, node distance=6cm]
-	\node[ram, right of=S] (RAM) {RAM - $ADD_1$};
+	\node[ram, right of=S] (RAM) {RAM};
 	\node[component, right of=RAM](C) {Componente progettato};
 	\path[-latex, black] (RAM) edge[bend right] node[swap]{$W_{ADD1}=0$} (C);
 	\path[-latex, black] (C) edge[bend right] node[swap] {$W_{ADD1}=0,\quad C_{ADD2}=0$} (RAM);
@@ -101,7 +130,7 @@ Leggo 0 dalla memoria. Si tratta del primo valore letto, quindi non posso «corr
 \begin{tikzpicture}[
 	component/.style={rectangle, draw, rounded corners, minimum width=1.5cm, minimum height=1cm},
 	ram/.style={rectangle, draw=gray, fill=lightgray, rounded corners, minimum width=1.5cm, minimum height=1cm}, auto, node distance=6cm]
-	\node[ram, right of=S] (RAM) {RAM - $ADD_3$};
+	\node[ram, right of=S] (RAM) {RAM};
 	\node[component, right of=RAM](C) {Componente progettato};
 	\path[-latex, black] (RAM) edge[bend right] node[swap]{$W_{ADD3}=192$} (C);
 	\path[-latex, black] (C) edge[bend right] node[swap] {$W_{ADD3}=192,\quad C_{ADD4}=31$} (RAM);
@@ -113,7 +142,7 @@ Leggo 192 dalla memoria. Si tratta di un valore maggiore di 0, quindi lo conside
 \begin{tikzpicture}[
 	component/.style={rectangle, draw, rounded corners, minimum width=1.5cm, minimum height=1cm},
 	ram/.style={rectangle, draw=gray, fill=lightgray, rounded corners, minimum width=1.5cm, minimum height=1cm}, auto, node distance=6cm]
-	\node[ram, right of=S] (RAM) {RAM - $ADD_5$};
+	\node[ram, right of=S] (RAM) {RAM};
 	\node[component, right of=RAM](C) {Componente progettato};
 	\path[-latex, black] (RAM) edge[bend right] node[swap]{$W_{ADD5}=0$} (C);
 	\path[-latex, black] (C) edge[bend right] node[swap] {$W_{ADD5}=192,\quad C_{ADD6}=30$} (RAM);
@@ -124,8 +153,133 @@ Leggo 0 dalla memoria. Non si tratta del primo valore letto, quindi non lo consi
 \\
 I valori numerici di questo esempio sono coerenti con le specifiche: $K$, cioè il numero di letture che il componente deve effettuare, è esprimibile con 10 bit, $W$, il dato in memoria, è una parola da 8 bit e gli indirizzi di memoria sono da 16 bit.
 \section{Architettura}
-\include{schema_circ.tex}
-Schema architetturale e degli stati della FSM. Per ogni componente breve descrizione e implementazione in VHDL.
+Il componente progettato, mostrato in Figura \ref{schema_blocchi} è stato suddiviso in dei sottoblocchi funzionali, ognuno con un compito diverso:
+\begin{figure}[h]
+	\includegraphics[scale=0.35]{schema_rete}
+	\caption{Schema a blocchi del componente progettato}
+	\label{schema_blocchi}
+\end{figure}
+\begin{itemize}
+	\item \textbf{ADDR-REG}, è un registro mantiene indica l'indirizzo della cella di memoria sulla quale effettuare le operazioni di lettura e scrittura;
+	\item \textbf{K-VAL-REG}, è un registro che viene inizializzato con il valore $K$ fornito in ingresso. Indica cioè il numero di operazioni di lettura e scrittura ancora da effettuare;
+	\item \textbf{W-REG}, è un insieme di due registri che mantengono memorizzate, rispettivamente, la parola $W$ e la credibilità $C$;
+	\item \textbf{FSM}, è la macchina a stati che funziona da unità di controllo. Abilita e disabilita le uscite (\textit{e di conseguenza i rispettivi ingressi degli altri componenti}) in funzione dello stato in cui si trova. La descrizione degli stati e dei segnali di uscita è riportata 
+\end{itemize}
+Nello schema è presente anche un \textbf{multiplexer}, necessario per portare in uscita il valore di $W$ o di $C$.
+\subsection{Implementazione in VHDL}
+La struttura appena descritta, e riportata in Figura \ref{schema_blocchi} è stata anche mappata nel codice VHDL, di cui si riportano le entity:
+\begin{lstlisting}[language=vhdl]
+entity addr_reg is
+	port(
+		i_addr      : in std_logic_vector(15 downto 0);
+		i_clk       : in std_logic;
+		i_rst       : in std_logic;
+		en_add_inc  : in std_logic;
+		en_add_read : in std_logic;
+		o_mem_addr  : out std_logic_vector(15 downto 0)
+	);
+end entity addr_reg;
+\end{lstlisting}
+In cui, \lstinline[style=vhdl]|i_addr| è un vettore di bit inizializzato con il primo indirizzo di memoria dal quale iniziare l'elaborazione e \lstinline[style=vhdl]|o_mem_addr| è l'indirizzo corrente e indica qual è la cella di memoria da leggere o scrivere ; viene di volta in volta incrementato (avendo definito un opportuno segnale nell'architettura, dato che essendo \lstinline[style=vhdl]|o_mem_addr| un output non può essere scritto) .
+\begin{lstlisting}[language=vhdl]
+entity k_val_reg is
+	port(
+		i_k         : in std_logic_vector(9 downto 0);
+		i_clk       : in std_logic;
+		i_rst       : in std_logic;
+		en_k_read   : in std_logic;
+		en_k_dec    : in std_logic;
+		o_k_val     : out std_logic_vector(9 downto 0)
+	);
+end entity k_val_reg
+\end{lstlisting}
+In cui,  \lstinline[style=vhdl]|i_k| è un vettore di bit inizializzato con la lunghezza $K$ della sequenza da elaborare.  \lstinline[style=vhdl]|o_k_val| è invece il valore corrente di $K$, che viene decrementato al termine di ogni elaborazione fino a diventare zero. Anche in questo caso, nell'architettura è stato introdotto un apposito segnale che permette la riscrittura di $K$.
+\begin{lstlisting}[language=vhdl]
+entity w_reg is
+	port(
+		i_mem_data   : in std_logic_vector(7 downto 0);
+		i_clk        : in std_logic;
+		i_rst        : in std_logic;
+		i_first_val  : in std_logic;
+		en_w_update  : in std_logic;
+		out_w        : out std_logic_vector(7 downto 0);
+		out_c        : out std_logic_vector(4 downto 0)
+	);
+end entity w_reg;
+\end{lstlisting}
+In cui, \lstinline[style=vhdl]|i_mem_data| è il vettore di 8 bit con il dato proveniente dalla memoria e che deve essere elaborato secondo i requisiti di funzionamento specificati nell'introduzione. \lstinline[style=vhdl]|out_w| e  \lstinline[style=vhdl]|out_c| sono i due vettori post-elaborazione, rispettivamente da 8 e 5 bit, e che devono essere scritti in memoria. Anche in questo caso, nell'architettura è stato introdotto un apposito segnale che permette la riscrittura di tali output.
+\begin{lstlisting}[language=vhdl]
+entity mux is
+	port(
+		in_w        : in std_logic_vector(7 downto 0);
+		in_c        : in std_logic_vector(4 downto 0);
+		en_mux      : in std_logic;
+		sel_mux     : in std_logic;
+		i_clk       : in std_logic;
+		i_rst       : in std_logic;
+		o_mem_data  : out std_logic_vector(7 downto 0)
+	);
+end entity mux;
+\end{lstlisting}
+In cui, \lstinline[style=vhdl]|in_w| e \lstinline[style=vhdl]|in_c| sono i segnali provenienti dal blocco W-REG e \lstinline[style=vhdl]|o_mem_data| è il vettore da 8 bit che deve essere scritto in memoria assumendo, alternativamente, un valore di $W$ o di $C$. Nel secondo caso, il multiplexer si occupa anche di fare un'operazione di padding per portare \lstinline[style=vhdl]|in_c|, vettore da 5 bit, su \lstinline[style=vhdl]|o_mem_data|, vettore da 8 bit.
+\subsection{Macchina a stati finiti}
+Omettendo di riportare il codice VHDL della entity dell'FSM, di seguito è invece schematizzato il comportamento di transizione tra i diversi stati della macchina:
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.28]{schema_stati}
+	\caption{Macchina a stati finiti}
+	\label{fsm}
+\end{figure}
+\\
+Essendo una macchina di Moore, a ciascuno stato sono anche specificate delle uscite. Per una migliore leggibilità, il valore delle uscite è riportato in Tabella \ref{uscite_fsm}. Di seguito sono invece descritti i vari stati:
+\begin{table}
+	\centering
+	\begin{tblr}{
+			row{even} = {Mercury},
+			column{even} = {c},
+			column{3} = {c},
+			column{5} = {c},
+			column{7} = {c},
+			column{9} = {c},
+			column{11} = {c},
+			vline{2-12} = {-}{},
+			hline{2} = {-}{},
+		}
+		& \begin{sideways}\textbf{o\_done}\end{sideways} & \begin{sideways}\textbf{o\_en\_mux}\end{sideways} & \begin{sideways}\textbf{o\_sel\_mux}\end{sideways} & \begin{sideways}\textbf{o\_w\_update}\end{sideways} & \begin{sideways}\textbf{o\_k\_read}\end{sideways} & \begin{sideways}\textbf{o\_k\_dec}\end{sideways} & \begin{sideways}\textbf{o\_add\_read}\end{sideways} & \begin{sideways}\textbf{o\_add\_inc}\end{sideways} & \begin{sideways}\textbf{o\_en\_mem}\end{sideways} & \begin{sideways}\textbf{o\_mem\_wr}\end{sideways} & \begin{sideways}\textbf{o\_first\_val}\end{sideways} \\
+		\textbf{INIT}                & 0                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    \\
+		\textbf{READY}               & 0                                              & 0                                                 & 0                                                  & 0                                                   & 1                                                 & 0                                                & 1                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    \\
+		\textbf{MEM\_READ\_FIRST}    & 0                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 1                                                 & 0                                                 & 0                                                    \\
+		\textbf{W\_MEM\_PREP\_FIRST} & 0                                              & 0                                                 & 0                                                  & 1                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 1                                                    \\
+		\textbf{MEM\_READ}           & 0                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 1                                                 & 0                                                 & 0                                                    \\
+		\textbf{W\_MEM\_PREP}        & 0                                              & 0                                                 & 0                                                  & 1                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    \\
+		\textbf{UPDATE\_W}           & 0                                              & 1                                                 & 1                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    \\
+		\textbf{C\_MEM\_PREP}        & 0                                              & 1                                                 & 0                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 1                                                  & 1                                                 & 1                                                 & 0                                                    \\
+		\textbf{UPDATE\_C}           & 0                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 1                                                & 0                                                   & 1                                                  & 1                                                 & 1                                                 & 0                                                    \\
+		\textbf{DONE}                & 1                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    
+	\end{tblr}
+	\caption{Uscite per ciascuno stato della FSM}
+	\label{uscite_fsm}
+\end{table}
+\subsubsection{INIT}
+Lo stato di INIT è quello che il componente raggiunge non appena viene dato il segnale di reset. Sarà quindi lo stato iniziale della prima elaborazione.
+\subsubsection{READY}
+Lo stato di READY si raggiunge non appena il segnale di reset viene portato a zero. Rappresenta lo stato in cui la macchina è in attesa del segnale alto di start, per poter iniziare l'elaborazione. Mentre il componente è in questo stato, inoltre, inizia la lettura dei valori di $K$ e dell'inidirizzo iniziale di memoria.
+\subsubsection{MEM\_READ\_FIRST}
+Lo stato di MEM\_READ\_FIRST si raggiunge non appena viene dato il segnale di start. In questo stato viene abilitata la lettura dalla memoria, così che al colpo di clock successivo il componente possa lavorare sul valore letto.
+\subsubsection{W\_MEM\_PREP\_FIRST}
+Lo stato di W\_MEM\_PREP\_FIRST abilita l'uscita o\_w\_update per consentire al componente di valutare il valore di $W$ appena letto dalla memoria. Differisce dallo stato di W\_MEM\_PREP solo per il fatto che il tipo di elaborazione che deve essere svolta, trattandosi del primo valore letto, è diversa da quella da svolgere per le letture successive alla prima.
+\subsubsection{UPDATE\_W}
+Lo stato di UPDATE\_W abilita il processo di aggiornamento del valore di $W$ che dovrà essere scritto in memoria. Le uscite permettono quindi di portare su o\_mem\_data, (abilitando il multiplexer), al colpo di clock successivo, il nuovo valore di $W$ da  scrivere in memoria .
+\subsubsection{C\_MEM\_PREP}
+Lo stato di C\_MEM\_PREP abilita le uscite per poter scrivere in memoria il valore appena portato su o\_mem\_data. Contestualmente, attiva anche il segnale per abilitare l'incremento dell'indirizzo (dato che la credibilità, al passo successivo, andrà scritta nell'indirizzo successivo) e per portare su o\_mem\_data il nuovo valore di credibilità memorizzato in W-REG.
+\subsubsection{C\_UPDATE}
+Lo stato di C\_UPDATE abilita le uscite per poter scrivere in memoria il valore della credibilità appena portato su o\_mem\_data. Contestualmente, abilita anche l'incremento dell'indirizzo per la successiva scrittura ed abilita il decremento di K, dato che questa elaborazione si è conclusa.
+\subsubsection{MEM\_READ}
+Lo stato di MEM\_READ valuta il valore di $K$ per capire se bisogna continuare con l'elaborazione. Contestualmente, abilita l'uscita per la lettura della memoria (preparandosi quindi a ricevere il nuovo valore da elaborare).
+\subsubsection{W\_MEM\_PREP}
+Lo stato di W\_MEM\_PREP si raggiunge se $K > 0$.  Abilita l'uscita o\_w\_update per consentire al componente di valutare il valore di $W$.
+\subsubsection{DONE}
+Lo stato di DONE si raggiunge quando $K = 0$, cioè quando l'elaborazione è terminata. Si rimane in questo stato fino a che start rimane alto. Non appena start viene portato a 0, la macchina torna di nuovo in uno stato di READY.
 \section{Risultati sperimentali}
 Report timing e utilization di Vivado. Metodologia di testing ed elenco dei testbench.
 \section{Conclusioni}
