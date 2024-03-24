@@ -1,0 +1,39 @@
+\babel@toc {italian}{}\relax 
+\babel@toc {italian}{}\relax 
+\contentsline {section}{\numberline {1}Introduzione}{2}{}%
+\contentsline {paragraph}{Passo 1:}{2}{}%
+\contentsline {paragraph}{Passo 2:}{3}{}%
+\contentsline {paragraph}{Passo 3:}{3}{}%
+\contentsline {section}{\numberline {2}Architettura}{3}{}%
+\contentsline {subsection}{\numberline {2.1}Implementazione in VHDL}{3}{}%
+\contentsline {paragraph}{}{5}{}%
+\contentsline {subsection}{\numberline {2.2}Macchina a stati finiti}{5}{}%
+\contentsline {subsubsection}{\numberline {2.2.1}INIT}{5}{}%
+\contentsline {subsubsection}{\numberline {2.2.2}READY}{6}{}%
+\contentsline {subsubsection}{\numberline {2.2.3}MEM\_READ\_FIRST}{6}{}%
+\contentsline {subsubsection}{\numberline {2.2.4}W\_MEM\_PREP\_FIRST}{6}{}%
+\contentsline {subsubsection}{\numberline {2.2.5}UPDATE\_W}{6}{}%
+\contentsline {subsubsection}{\numberline {2.2.6}C\_MEM\_PREP}{6}{}%
+\contentsline {subsubsection}{\numberline {2.2.7}C\_UPDATE}{6}{}%
+\contentsline {subsubsection}{\numberline {2.2.8}MEM\_READ}{7}{}%
+\contentsline {subsubsection}{\numberline {2.2.9}W\_MEM\_PREP}{7}{}%
+\contentsline {subsubsection}{\numberline {2.2.10}DONE}{7}{}%
+\contentsline {section}{\numberline {3}Risultati sperimentali}{7}{}%
+\contentsline {paragraph}{}{7}{}%
+\contentsline {subsection}{\numberline {3.1}Test basati sugli esempi delle specifiche}{7}{}%
+\contentsline {subsubsection}{\numberline {3.1.1}Esempi 1, 4, 5}{7}{}%
+\contentsline {subsubsection}{\numberline {3.1.2}Esempio 2}{7}{}%
+\contentsline {subsubsection}{\numberline {3.1.3}Esempio 3}{7}{}%
+\contentsline {subsection}{\numberline {3.2}Test su casi limite - valori}{8}{}%
+\contentsline {subsubsection}{\numberline {3.2.1}Test 1}{8}{}%
+\contentsline {subsubsection}{\numberline {3.2.2}Test 2}{8}{}%
+\contentsline {subsubsection}{\numberline {3.2.3}Test 3}{8}{}%
+\contentsline {subsubsection}{\numberline {3.2.4}Test 4}{8}{}%
+\contentsline {subsubsection}{\numberline {3.2.5}Test 5}{8}{}%
+\contentsline {subsection}{\numberline {3.3}Test su casi limite - comportamenti}{8}{}%
+\contentsline {subsubsection}{\numberline {3.3.1}Test 1}{8}{}%
+\contentsline {subsubsection}{\numberline {3.3.2}Test 2}{9}{}%
+\contentsline {subsubsection}{\numberline {3.3.3}Test 3}{9}{}%
+\contentsline {subsubsection}{\numberline {3.3.4}Test 4}{9}{}%
+\contentsline {section}{\numberline {4}Conclusioni}{9}{}%
+\contentsline {paragraph}{}{9}{}%

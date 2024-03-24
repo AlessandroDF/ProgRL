@@ -14,6 +14,7 @@
 \usepackage{color}
 \usepackage{rotating}
 \usepackage{tabularray}
+\usepackage[italian]{babel}
 
 \definecolor{Mercury}{rgb}{0.89,0.89,0.89}
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -66,6 +67,9 @@
 	{\large Consegna del 01/04/2024\par}
 	
 \end{titlepage}
+
+\tableofcontents
+\vfill
 
 \section{Introduzione}
 Il sistema progettato ha come scopo quello di ricevere in ingresso dei valori interi positivi, valutare la loro attendibilità e generare, in modo coerente con il valore letto, un ulteriore valore numerico che possa descriverne la credibilità. Si pensi, ad esempio, ad un sistema che opera in questo modo:
@@ -372,5 +376,7 @@ Obiettivo di questo test è quello di verificare che, mentre il segnale di reset
 \end{itemize}
 Obiettivo di questo test è quello di verificare che il compoente si comporti in modo corretto qualora vengano forniti segnali di reset in diversi stati dell'elaborazione (durante l'elaborazione, come per il test 2 e post-elaborazione).
 \section{Conclusioni}
-Cosa scrivo di bello qui????
+Il componente progettato soddisfa i requisti temporali imposti dalle specifiche e simula correttamente i casi di test sopra elencati, sia in behavioral che in post-sintesi. 
+\paragraph{}
+La scelta di una divisione in più moduli del componente ha semplificato la progettazione, e la conseguente scrittura del codice VHDL, oltre alla gestione dei vari segnali per garantire il funzionamento nei diversi stati di elaborazione.
 \end{document}
