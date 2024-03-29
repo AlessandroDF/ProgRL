@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage[T1]{fontenc}
@@ -6,6 +6,7 @@
 \usepackage{svg}
 \usepackage[a4paper, margin=2.5cm]{geometry}
 \usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows, calc}
 \usepackage{array}
 \definecolor{lightgray}{cmyk}{0,0,0,0.19}
 \usetikzlibrary{positioning}
@@ -41,6 +42,16 @@
 	tabsize=2
 }
 \lstset{style=vhdl}
+
+\tikzset{
+	->,  % makes the edges directed
+	>=stealth, % makes the arrow heads bold
+	shorten >=2pt, shorten <=2pt, % shorten the arrow
+	node distance=6cm, % specifies the minimum distance between two nodes. Change if n
+	every state/.style={minimum size=3cm}, % sets the properties for each ’state’ n
+	initial text=$ $, % sets the text that appears on the start arrow
+}
+
 \begin{document}
 	
 \begin{titlepage}
@@ -231,14 +242,41 @@ Tutte le architetture di questi quattro componenti sono formate da un unico proc
 \subsection{Macchina a stati finiti}
 Omettendo di riportare il codice VHDL della entity dell'FSM, di seguito è invece schematizzato il comportamento di transizione tra i diversi stati della macchina:
 \begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.28]{schema_stati}
-	\caption{Macchina a stati finiti}
-	\label{fsm}
+	\begin{tikzpicture}[thick, scale=0.6, every node/.style={scale=0.6}]
+		\node[state] (s0) {INIT};
+		\node[state, right of=s0] (s1) {READY};
+		\node[state, right of=s1] (s2) {MEM-READ};
+		\node[state, right of=s2] (s3) {W-MEM-PREP};
+		\node[state, right of=s3] (s4) {W-UPDATE};
+		\node[state, below of=s4] (s5) {C-MEM-PREP};
+		\node[state, below of=s3] (s6) {C-UPDATE};
+		\node[state, below of=s2] (s7) {DONE};
+		
+		\draw   (s0) edge[loop above] node{RESET=1} (s0)
+		(s0) edge node[above]{RESET=0} (s1)
+		(s1) edge[loop above] node{START=0} (s1)
+		(s1) edge node[above]{START=1} (s2)
+		(s2) edge node[above]{K!=0} (s3)
+		(s3) edge (s4)
+		(s4) edge (s5)
+		(s5) edge (s6)
+		(s6) edge (s2)
+		(s2) edge node[right]{K=0} (s7)
+		(s7) edge[loop below] node{START=1} (s7)
+		(s7) edge node[left] {START=0} (s1)
+		;
+	\end{tikzpicture}
 \end{figure}
 \\
-Essendo una macchina di Moore, a ciascuno stato sono anche specificate delle uscite. Per una migliore leggibilità, il valore delle uscite è riportato in Tabella \ref{uscite_fsm}. Di seguito sono invece descritti i vari stati:
-\begin{table}
+Si possono individuare alcune macro-aree che racchiudono parte degli stati:
+\begin{itemize}
+	\item \textbf{Preparazione} del componente, conentente gli stati di INIT e di READY. In questi stati l'elaborazione vera e propria non è ancora iniziata, ma vengono gestiti gli opportuni segnali per poter proseguire nell'elaborazione.;
+	\item \textbf{Lettura}, conentente lo stato di MEM\_READ;
+	\item \textbf{Aggiornamento}, conenente i quattro stati che si occupano di elaborare ciò che è stato letto dalla memoria e scrivere i corretti valori.
+	\item \textbf{Termine} dell'elaborazione, conenente lo stato di DONE.
+\end{itemize}
+Essendo una macchina di Moore, a ciascuno stato sono anche specificate delle uscite. Per una migliore leggibilità, il valore delle uscite è riportato in Tabella \ref{uscite_fsm}.
+\begin{table}[h]
 	\centering
 	\begin{tblr}{
 			row{even} = {Mercury},
@@ -253,9 +291,7 @@ Essendo una macchina di Moore, a ciascuno stato sono anche specificate delle usc
 		}
 		& \begin{sideways}\textbf{o\_done}\end{sideways} & \begin{sideways}\textbf{o\_en\_mux}\end{sideways} & \begin{sideways}\textbf{o\_sel\_mux}\end{sideways} & \begin{sideways}\textbf{o\_w\_update}\end{sideways} & \begin{sideways}\textbf{o\_k\_read}\end{sideways} & \begin{sideways}\textbf{o\_k\_dec}\end{sideways} & \begin{sideways}\textbf{o\_add\_read}\end{sideways} & \begin{sideways}\textbf{o\_add\_inc}\end{sideways} & \begin{sideways}\textbf{o\_en\_mem}\end{sideways} & \begin{sideways}\textbf{o\_mem\_wr}\end{sideways} & \begin{sideways}\textbf{o\_first\_val}\end{sideways} \\
 		\textbf{INIT}                & 0                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    \\
-		\textbf{READY}               & 0                                              & 0                                                 & 0                                                  & 0                                                   & 1                                                 & 0                                                & 1                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    \\
-		\textbf{MEM\_READ\_FIRST}    & 0                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 1                                                 & 0                                                 & 0                                                    \\
-		\textbf{W\_MEM\_PREP\_FIRST} & 0                                              & 0                                                 & 0                                                  & 1                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 1                                                    \\
+		\textbf{READY}               & 0                                              & 0                                                 & 0                                                  & 0                                                   & 1                                                 & 0                                                & 1                                                   & 0                                                  & 0                                                 & 0                                                 & 1                                                    \\
 		\textbf{MEM\_READ}           & 0                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 1                                                 & 0                                                 & 0                                                    \\
 		\textbf{W\_MEM\_PREP}        & 0                                              & 0                                                 & 0                                                  & 1                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    \\
 		\textbf{UPDATE\_W}           & 0                                              & 1                                                 & 1                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    \\
@@ -266,14 +302,12 @@ Essendo una macchina di Moore, a ciascuno stato sono anche specificate delle usc
 	\caption{Uscite per ciascuno stato della FSM}
 	\label{uscite_fsm}
 \end{table}
+\\
+Di seguito sono invece descritti i vari stati:
 \subsubsection{INIT}
 Lo stato di INIT è quello che il componente raggiunge non appena viene dato il segnale di reset. Sarà quindi lo stato iniziale della prima elaborazione.
 \subsubsection{READY}
-Lo stato di READY si raggiunge non appena il segnale di reset viene portato a zero. Rappresenta lo stato in cui la macchina è in attesa del segnale alto di start, per poter iniziare l'elaborazione. Mentre il componente è in questo stato, inoltre, inizia la lettura dei valori di $K$ e dell'inidirizzo iniziale di memoria.
-\subsubsection{MEM\_READ\_FIRST}
-Lo stato di MEM\_READ\_FIRST si raggiunge non appena viene dato il segnale di start. In questo stato viene abilitata la lettura dalla memoria, così che al colpo di clock successivo il componente possa lavorare sul valore letto.
-\subsubsection{W\_MEM\_PREP\_FIRST}
-Lo stato di W\_MEM\_PREP\_FIRST abilita l'uscita o\_w\_update per consentire al componente di valutare il valore di $W$ appena letto dalla memoria. Differisce dallo stato di W\_MEM\_PREP solo per il fatto che il tipo di elaborazione che deve essere svolta, trattandosi del primo valore letto, è diversa da quella da svolgere per le letture successive alla prima.
+Lo stato di READY si raggiunge non appena il segnale di reset viene portato a zero. Rappresenta lo stato in cui la macchina è in attesa del segnale alto di start, per poter iniziare l'elaborazione. Mentre il componente è in questo stato, inoltre, inizia la lettura dei valori di $K$ e dell'indirizzo iniziale di memoria. Infine, da questo stato, viene abilitato il segnale per l'inizializzazione del registro W\_REG.
 \subsubsection{UPDATE\_W}
 Lo stato di UPDATE\_W abilita il processo di aggiornamento del valore di $W$ che dovrà essere scritto in memoria. Le uscite permettono quindi di portare su o\_mem\_data, (abilitando il multiplexer), al colpo di clock successivo, il nuovo valore di $W$ da  scrivere in memoria .
 \subsubsection{C\_MEM\_PREP}
@@ -289,10 +323,10 @@ Lo stato di DONE si raggiunge quando $K = 0$, cioè quando l'elaborazione è ter
 \section{Risultati sperimentali}
 Per testare il componente progettato, come primo passo, è stato sottoposto al testbench fornito insieme alla specifica. Completata correttamente la sintesi e terminate le due simulazioni, behavioral e post-syntesis sono stati generati i \lstinline|report_timing| e \lstinline|report_utilization| con i seguenti risultati:
 \begin{itemize}
-	\item \lstinline|Slack (MET):	15.847ns  (required time - arrival time)|. Sono quindi stati rispettati i vincoli temporali imposti dalla specifica.
-	\item \lstinline|Register as Flip Flop: 51|, \lstinline|Register as Latch: 0|. Da cui si nota che sono stati utilizzati 51 flip-flop e nessun latch.
+	\item \lstinline|Slack (MET):	16.162ns  (required time - arrival time)|. Sono quindi stati rispettati i vincoli temporali imposti dalla specifica.
+	\item \lstinline|Register as Flip Flop: 50|, \lstinline|Register as Latch: 0|. Da cui si nota che sono stati utilizzati 50 flip-flop e nessun latch. Dallo stesso report si può anche vedere il numero di look-up table utilizzate, in questo caso 52.
 \end{itemize}
-Terminata senza errori la simulazione del testbench fornito, una secondo passo è stato quello di ricostruire i testbench sulla base degli esempi dello stato della memoria presenti nel file delle specifiche. Come terzo ed ultimo passo nella fase di test sono stati individuati dei casi limite legati sia ai valori assumibili dai vari segnali, sia al comportamento del componente.
+Una volta terminata senza errori la simulazione del testbench fornito, il secondo passo è stato quello di ricostruire i testbench sulla base degli esempi dello stato della memoria presenti nel file delle specifiche. Come terzo passo nella fase di test sono stati individuati dei casi limite legati sia ai valori assumibili dai vari segnali, sia al comportamento del componente ed infine, come ultimo controllo, sono state generate, tramite un apposito script, 100 sequenze di valori pseudo-casuali in cui la propabilità di generare il valore 0 era maggiore degli altri interi così da verificare più approfonditamente il comportamento del componente.
 \paragraph{}
 Di seguito, per ciascun test effettuato, sono descritte le peculiarità che hanno portato alla scelta di sottoporre il componente a tale test.
 \subsection{Test basati sugli esempi delle specifiche}
@@ -378,5 +412,5 @@ Obiettivo di questo test è quello di verificare che il compoente si comporti in
 \section{Conclusioni}
 Il componente progettato soddisfa i requisti temporali imposti dalle specifiche e simula correttamente i casi di test sopra elencati, sia in behavioral che in post-sintesi. 
 \paragraph{}
-La scelta di una divisione in più moduli del componente ha semplificato la progettazione, e la conseguente scrittura del codice VHDL, oltre alla gestione dei vari segnali per garantire il funzionamento nei diversi stati di elaborazione.
+Come mostrato dallo schema a blocchi riporato in Figura \ref{schema_blocchi} ho scelto di progettare il componente suddividendolo in vari blocchi funzionali. Questa scelta ha semplificato non solo la fase di progettazione inziale, e la conseguente scrittura del codice VHDL, ma anche la gestione dei vari segnali per garantire il funzionamento nei diversi stati di elaborazione.
 \end{document}

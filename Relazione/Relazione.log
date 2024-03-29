@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.9)  24 MAR 2024 12:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.9)  29 MAR 2024 17:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -493,39 +493,79 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \Gm@layoutvoffset=\dimen279
 \Gm@dimlist=\toks31
 )
-(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
-Package: array 2022/09/04 v2.5g Tabular extension package (FMi)
-\col@sep=\dimen280
-\ar@mcellbox=\box64
-\extrarowheight=\dimen281
-\NC@list=\toks32
-\extratabsurround=\skip50
-\backup@length=\skip51
-\ar@cellbox=\box65
-)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibraryautomata.code.tex
+File: tikzlibraryautomata.code.tex 2023-01-15 v3.1.10 (3.1.10)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibraryshapes.multipart.code.tex
+File: tikzlibraryshapes.multipart.code.tex 2023-01-15 v3.1.10 (3.1.10)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshape
+s.multipart.code.tex
+File: pgflibraryshapes.multipart.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfnodepartlowerbox=\box64
+\pgfnodeparttwobox=\box65
+\pgfnodepartthreebox=\box66
+\pgfnodepartfourbox=\box67
+\pgfnodeparttwentybox=\box68
+\pgfnodepartnineteenbox=\box69
+\pgfnodeparteighteenbox=\box70
+\pgfnodepartseventeenbox=\box71
+\pgfnodepartsixteenbox=\box72
+\pgfnodepartfifteenbox=\box73
+\pgfnodepartfourteenbox=\box74
+\pgfnodepartthirteenbox=\box75
+\pgfnodeparttwelvebox=\box76
+\pgfnodepartelevenbox=\box77
+\pgfnodeparttenbox=\box78
+\pgfnodepartninebox=\box79
+\pgfnodeparteightbox=\box80
+\pgfnodepartsevenbox=\box81
+\pgfnodepartsixbox=\box82
+\pgfnodepartfivebox=\box83
+)))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
 zlibrarypositioning.code.tex
 File: tikzlibrarypositioning.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibraryarrows.code.tex
+File: tikzlibraryarrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.code.
+tex
+File: pgflibraryarrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\arrowsize=\dimen280
+)) (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+Package: array 2022/09/04 v2.5g Tabular extension package (FMi)
+\col@sep=\dimen281
+\ar@mcellbox=\box84
+\extrarowheight=\dimen282
+\NC@list=\toks32
+\extratabsurround=\skip50
+\backup@length=\skip51
+\ar@cellbox=\box85
+)
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count289
-\lst@gtempboxa=\box66
+\lst@gtempboxa=\box86
 \lst@token=\toks33
 \lst@length=\count290
-\lst@currlwidth=\dimen282
+\lst@currlwidth=\dimen283
 \lst@column=\count291
 \lst@pos=\count292
-\lst@lostspace=\dimen283
-\lst@width=\dimen284
+\lst@lostspace=\dimen284
+\lst@width=\dimen285
 \lst@newlines=\count293
 \lst@lineno=\count294
-\lst@maxwidth=\dimen285
+\lst@maxwidth=\dimen286
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2023/02/27 1.9 (Carsten Heinz)
 \c@lstnumber=\count295
 \lst@skipnumbers=\count296
-\lst@framebox=\box67
+\lst@framebox=\box87
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
 File: listings.cfg 2023/02/27 1.9 listings configuration
@@ -541,7 +581,7 @@ Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
 \c@r@tfl@t=\count297
 \rotFPtop=\skip52
 \rotFPbot=\skip53
-\rot@float@box=\box68
+\rot@float@box=\box88
 \rot@mess@toks=\toks34
 )
 (/usr/share/texlive/texmf-dist/tex/latex/tabularray/tabularray.sty
@@ -551,35 +591,35 @@ Package: expl3 2023-02-22 L3 programming layer (loader)
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2023-01-16 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count298
-\l__pdf_internal_box=\box69
+\l__pdf_internal_box=\box89
 ))
 Package: tabularray 2023-03-01 v2023A Typeset tabulars and arrays with LaTeX3
 \l__tblr_a_int=\count299
 \l__tblr_c_int=\count300
 \l__tblr_r_int=\count301
-\l__tblr_d_dim=\dimen286
-\l__tblr_h_dim=\dimen287
-\l__tblr_o_dim=\dimen288
-\l__tblr_p_dim=\dimen289
-\l__tblr_q_dim=\dimen290
-\l__tblr_r_dim=\dimen291
-\l__tblr_s_dim=\dimen292
-\l__tblr_t_dim=\dimen293
-\l__tblr_v_dim=\dimen294
-\l__tblr_w_dim=\dimen295
-\l__tblr_a_box=\box70
-\l__tblr_b_box=\box71
-\l__tblr_c_box=\box72
-\l__tblr_d_box=\box73
+\l__tblr_d_dim=\dimen287
+\l__tblr_h_dim=\dimen288
+\l__tblr_o_dim=\dimen289
+\l__tblr_p_dim=\dimen290
+\l__tblr_q_dim=\dimen291
+\l__tblr_r_dim=\dimen292
+\l__tblr_s_dim=\dimen293
+\l__tblr_t_dim=\dimen294
+\l__tblr_v_dim=\dimen295
+\l__tblr_w_dim=\dimen296
+\l__tblr_a_box=\box90
+\l__tblr_b_box=\box91
+\l__tblr_c_box=\box92
+\l__tblr_d_box=\box93
 \g__tblr_table_count_int=\count302
 \c@rownum=\count303
 \c@colnum=\count304
 \c@rowcount=\count305
 \c@colcount=\count306
-\abovesep=\dimen296
-\belowsep=\dimen297
-\leftsep=\dimen298
-\rightsep=\dimen299
+\abovesep=\dimen297
+\belowsep=\dimen298
+\leftsep=\dimen299
+\rightsep=\dimen300
 \g_tblr_level_int=\count307
 \g__tblr_data_row_key_count_int=\count308
 \g__tblr_data_column_key_count_int=\count309
@@ -590,64 +630,64 @@ Package: tabularray 2023-03-01 v2023A Typeset tabulars and arrays with LaTeX3
 \l__tblr_key_quotient_two_int=\count314
 \l__tblr_key_remainder_int=\count315
 \g__tblr_data_str_value_count_int=\count316
-\rulewidth=\dimen300
-\l__tblr_strut_dp_dim=\dimen301
-\l__tblr_strut_ht_dim=\dimen302
-\g__tblr_cell_wd_dim=\dimen303
-\g__tblr_cell_ht_dim=\dimen304
-\g__tblr_cell_head_dim=\dimen305
-\g__tblr_cell_foot_dim=\dimen306
-\l__column_target_dim=\dimen307
-\l__tblr_caption_box=\box74
-\l__tblr_caption_left_box=\box75
-\l__tblr_row_head_box=\box76
-\l__tblr_row_foot_box=\box77
-\l__tblr_row_head_foot_dim=\dimen308
-\tablewidth=\dimen309
-\l__tblr_table_firsthead_box=\box78
-\l__tblr_table_middlehead_box=\box79
-\l__tblr_table_lasthead_box=\box80
-\l__tblr_table_firstfoot_box=\box81
-\l__tblr_table_middlefoot_box=\box82
-\l__tblr_table_lastfoot_box=\box83
-\l__tblr_remain_height_dim=\dimen310
+\rulewidth=\dimen301
+\l__tblr_strut_dp_dim=\dimen302
+\l__tblr_strut_ht_dim=\dimen303
+\g__tblr_cell_wd_dim=\dimen304
+\g__tblr_cell_ht_dim=\dimen305
+\g__tblr_cell_head_dim=\dimen306
+\g__tblr_cell_foot_dim=\dimen307
+\l__column_target_dim=\dimen308
+\l__tblr_caption_box=\box94
+\l__tblr_caption_left_box=\box95
+\l__tblr_row_head_box=\box96
+\l__tblr_row_foot_box=\box97
+\l__tblr_row_head_foot_dim=\dimen309
+\tablewidth=\dimen310
+\l__tblr_table_firsthead_box=\box98
+\l__tblr_table_middlehead_box=\box99
+\l__tblr_table_lasthead_box=\box100
+\l__tblr_table_firstfoot_box=\box101
+\l__tblr_table_middlefoot_box=\box102
+\l__tblr_table_lastfoot_box=\box103
+\l__tblr_remain_height_dim=\dimen311
 \l__tblr_long_from_int=\count317
 \l__tblr_long_to_int=\count318
 \l__tblr_curr_i_int=\count319
 \l__tblr_prev_i_int=\count320
 \l__tblr_table_page_int=\count321
-\l__tblr_table_head_box=\box84
-\l__tblr_table_foot_box=\box85
-\l__tblr_table_head_foot_dim=\dimen311
-\l__tblr_table_head_body_foot_dim=\dimen312
-\l__tblr_table_box=\box86
-\l__tblr_table_hlines_box=\box87
-\l__tblr_hline_box=\box88
-\l__tblr_row_box=\box89
-\l__tblr_col_o_wd_dim=\dimen313
-\l__tblr_col_b_wd_dim=\dimen314
-\l__tblr_hline_leftskip_dim=\dimen315
-\l__tblr_hline_rightskip_dim=\dimen316
-\l__tblr_row_ht_dim=\dimen317
-\l__tblr_row_dp_dim=\dimen318
-\l__tblr_row_abovesep_dim=\dimen319
-\l__tblr_row_belowsep_dim=\dimen320
-\l__tblr_row_vlines_box=\box90
-\l__tblr_vline_box=\box91
-\l__tblr_cell_box=\box92
-\l__row_upper_dim=\dimen321
-\l__row_lower_dim=\dimen322
-\l__row_vpace_dim=\dimen323
-\l__tblr_vline_aboveskip_dim=\dimen324
-\l__tblr_vline_belowskip_dim=\dimen325
-\l__tblr_cell_wd_dim=\dimen326
-\l__tblr_cell_ht_dim=\dimen327
-\l__tblr_diag_box=\box93
+\l__tblr_table_head_box=\box104
+\l__tblr_table_foot_box=\box105
+\l__tblr_table_head_foot_dim=\dimen312
+\l__tblr_table_head_body_foot_dim=\dimen313
+\l__tblr_table_box=\box106
+\l__tblr_table_hlines_box=\box107
+\l__tblr_hline_box=\box108
+\l__tblr_row_box=\box109
+\l__tblr_col_o_wd_dim=\dimen314
+\l__tblr_col_b_wd_dim=\dimen315
+\l__tblr_hline_leftskip_dim=\dimen316
+\l__tblr_hline_rightskip_dim=\dimen317
+\l__tblr_row_ht_dim=\dimen318
+\l__tblr_row_dp_dim=\dimen319
+\l__tblr_row_abovesep_dim=\dimen320
+\l__tblr_row_belowsep_dim=\dimen321
+\l__tblr_row_vlines_box=\box110
+\l__tblr_vline_box=\box111
+\l__tblr_cell_box=\box112
+\l__row_upper_dim=\dimen322
+\l__row_lower_dim=\dimen323
+\l__row_vpace_dim=\dimen324
+\l__tblr_vline_aboveskip_dim=\dimen325
+\l__tblr_vline_belowskip_dim=\dimen326
+\l__tblr_cell_wd_dim=\dimen327
+\l__tblr_cell_ht_dim=\dimen328
+\l__tblr_diag_box=\box113
 )
 (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
 Package: babel 2023/02/13 3.86 The Babel package
 \babel@savecnt=\count322
-\U@D=\dimen328
+\U@D=\dimen329
 \l@unhyphenated=\language85
 
 (/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
@@ -671,31 +711,31 @@ Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
 (./Relazione.aux)
 \openout1 = `Relazione.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count328
-\scratchdimen=\dimen329
-\scratchbox=\box94
+\scratchdimen=\dimen330
+\scratchbox=\box114
 \nofMPsegments=\count329
 \nofMParguments=\count330
 \everyMPshowfont=\toks35
 \MPscratchCnt=\count331
-\MPscratchDim=\dimen330
+\MPscratchDim=\dimen331
 \MPnumerator=\count332
 \makeMPintoPDFobject=\count333
 \everyMPtoPDFconversion=\toks36
@@ -750,12 +790,12 @@ Package: ninecolors 2022-02-13 vv2022D Select colors with proper color contrast
 (/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 Package: xparse 2023-02-02 L3 Experimental document command parser
 ))
-LaTeX Info: Redefining \it@ocap on input line 44.
-LaTeX Info: Redefining \it@ccap on input line 44.
+LaTeX Info: Redefining \it@ocap on input line 55.
+LaTeX Info: Redefining \it@ccap on input line 55.
 <logo_polimi.png, id=4, 666.49pt x 489.83pt>
 File: logo_polimi.png Graphic file (type png)
 <use logo_polimi.png>
-Package pdftex.def Info: logo_polimi.png  used on input line 50.
+Package pdftex.def Info: logo_polimi.png  used on input line 61.
 (pdftex.def)             Requested size: 233.275pt x 171.44305pt.
 
 [1
@@ -772,17 +812,17 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \openout4 = `Relazione.toc'.
 
  [1] [2]
-Underfull \hbox (badness 10000) in paragraph at lines 151--155
+Underfull \hbox (badness 10000) in paragraph at lines 162--166
 
  []
 
 <schema_rete.png, id=33, 1392.20125pt x 844.15375pt>
 File: schema_rete.png Graphic file (type png)
 <use schema_rete.png>
-Package pdftex.def Info: schema_rete.png  used on input line 158.
+Package pdftex.def Info: schema_rete.png  used on input line 169.
 (pdftex.def)             Requested size: 487.27774pt x 295.45824pt.
 
-Overfull \hbox (32.03363pt too wide) in paragraph at lines 158--159
+Overfull \hbox (32.03363pt too wide) in paragraph at lines 169--170
 [][] 
  []
 
@@ -793,7 +833,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 File: lstlang1.sty 2023/02/27 1.9 listings language file
 )
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1
-71.
+82.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2022/07/10 v2.5l Standard LaTeX font definitions
@@ -801,11 +841,11 @@ File: t1cmtt.fd 2022/07/10 v2.5l Standard LaTeX font definitions
 
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [4 <
 ./schema_rete.png>]
-<schema_stati.png, id=44, 1532.72626pt x 697.60625pt>
-File: schema_stati.png Graphic file (type png)
-<use schema_stati.png>
-Package pdftex.def Info: schema_stati.png  used on input line 235.
-(pdftex.def)             Requested size: 429.16043pt x 195.32841pt.
+Overfull \hbox (6.55553pt too wide) in paragraph at lines 268--269
+[][] 
+ []
+
+[5]
 > Step: init table outer spec.
 > Step: parse table options.
 > Step: split table.
@@ -814,37 +854,35 @@ Package pdftex.def Info: schema_stati.png  used on input line 235.
 > Step: execute table commands.
 > Step: calculate cell and line sizes.
 > Step: build the whole table.
-
-[5 <./schema_stati.png>] [6] [7] [8] [9] (./Relazione.aux) ) 
+ [6] [7] [8] [9] (./Relazione.aux) ) 
 Here is how much of TeX's memory you used:
- 36575 strings out of 476041
- 908492 string characters out of 5793175
- 1999388 words of memory out of 6000000
- 56644 multiletter control sequences out of 15000+600000
- 526584 words of font info for 52 fonts, out of 8000000 for 9000
+ 37694 strings out of 476041
+ 942644 string characters out of 5793175
+ 1998388 words of memory out of 6000000
+ 57746 multiletter control sequences out of 15000+600000
+ 526230 words of font info for 52 fonts, out of 8000000 for 9000
  1137 hyphenation exceptions out of 8191
- 99i,11n,111p,626b,1253s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/s
-fbx1000.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfbx1200
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfrm0500.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/cm-super/sfti1440.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/cm-super/sftt0800.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/cm-super/sfxc1440.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/c
-m-super/sfxc1728.pfb>
-Output written on Relazione.pdf (10 pages, 523423 bytes).
+ 99i,11n,111p,688b,1253s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/cm-super/sfrm0500.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/cm-super/sfrm1000.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/cm-super/sfrm1200.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/cm-super/sfti1000.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-s
+uper/sfti1440.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sf
+tt0800.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfxc1440.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfxc1728.pfb>
+Output written on Relazione.pdf (10 pages, 449514 bytes).
 PDF statistics:
- 137 PDF objects out of 1000 (max. 8388607)
+ 135 PDF objects out of 1000 (max. 8388607)
  83 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 28 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 23 words of extra memory for PDF output out of 10000 (max. 10000000)
 

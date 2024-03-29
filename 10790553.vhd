@@ -183,8 +183,6 @@ architecture fsm_arch of fsm is
     type S is (
         INIT,
         READY,
-        MEM_READ_FIRST,
-        W_MEM_PREP_FIRST,
         W_MEM_PREP,
         W_UPDATE,
         C_MEM_PREP,
@@ -207,13 +205,7 @@ begin
                     end if;
                 when READY =>
                     if i_start = '1' then
-                        curr_state <= MEM_READ_FIRST;
-                    end if;
-                when MEM_READ_FIRST =>
-                    if i_k = "0000000000" then
-                        curr_state <= DONE;
-                    elsif i_k > "0000000000" then
-                        curr_state <= W_MEM_PREP_FIRST;  
+                        curr_state <= MEM_READ;
                     end if;
                 when MEM_READ =>
                     if i_k = "0000000000" then
@@ -221,8 +213,6 @@ begin
                     elsif i_k > "0000000000" then
                         curr_state <= W_MEM_PREP;  
                     end if;
-                when W_MEM_PREP_FIRST =>
-                    curr_state <= W_UPDATE;
                 when W_MEM_PREP =>
                     curr_state <= W_UPDATE;
                 when W_UPDATE =>
@@ -259,11 +249,8 @@ begin
         elsif curr_state = READY then
             o_k_read <= '1';
             o_add_read <= '1';
-        elsif curr_state = MEM_READ_FIRST then
-            o_en_mem <= '1';
-        elsif curr_state = W_MEM_PREP_FIRST then
+            -- Lo stato di ready indica che avviene una prima lettura
             o_first_val <= '1';
-            o_w_update <= '1';
         elsif curr_state = W_MEM_PREP then
             o_w_update <= '1';
         elsif curr_state = W_UPDATE then
@@ -390,21 +377,21 @@ begin
             stored_w <= (others => '0');
             stored_c <= (others => '0');
         elsif i_clk'event and i_clk = '1' then
-            if i_mem_data = "00000000" then
-                if en_w_update = '1' then
-                    if i_first_val = '1' then
-                        stored_w <= "00000000";
-                        stored_c <= "00000";
-                    elsif i_first_val = '0' then
-                        -- Non aggiorno stored_w perchè deve mantenere il
-                        -- valore aveva precedentemente
-                        if stored_c > "00000" then
-                            stored_c <= stored_c - "00001";
-                        end if;
+            if i_first_val = '1' then
+                -- Serve anche qui l'inizializzazione perchè, per letture successiva
+                -- non è necessario passare per lo stato di reset. Ma ho comunque
+                -- bisogno di avere inizializzati a 0 i due segnali (per gestire la
+                -- prima lettura)
+                stored_w <= (others => '0');
+                stored_c <= (others => '0');
+            elsif en_w_update = '1' then
+                if i_mem_data = "00000000" then
+                    -- Non aggiorno stored_w perchè deve mantenere il
+                    -- valore aveva precedentemente
+                    if stored_c > "00000" then
+                        stored_c <= stored_c - "00001";
                     end if;
-                end if;
-            elsif i_mem_data > "00000000" then
-                if en_w_update = '1' then
+                elsif i_mem_data > "00000000" then
                     stored_w <= i_mem_data;
                     stored_c <= "11111";
                 end if;
