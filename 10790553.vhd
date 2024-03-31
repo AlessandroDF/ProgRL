@@ -435,7 +435,7 @@ begin
             o_mem_data <= (others => '0');
         end if;
         if i_clk'event AND i_clk = '1' then
-            if en_mux = '1' then -- Modifica effettuata post-funzionamento (1)
+            if en_mux = '1' then
                 if sel_mux = '1' then
                     o_mem_data <= in_w;
                 elsif sel_mux = '0' then
