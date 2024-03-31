@@ -1,3 +1,13 @@
+-- PROVA FINALE
+-- Progetto di Reti Logiche
+--
+-- Politecnico di Milano
+-- Corso di laurea in ingegneria informatica
+-- A.A.: 2023/2024
+--
+-- Alessandro Del Fatti
+-- C.P.: 10790553
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
