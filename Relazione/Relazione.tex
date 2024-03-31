@@ -13,6 +13,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{color}
+\usepackage{amsmath}
 \usepackage{rotating}
 \usepackage{tabularray}
 \usepackage[italian]{babel}
@@ -29,7 +30,7 @@
 	keywordstyle=\color{magenta},
 	numberstyle=\tiny\color{codegray},
 	stringstyle=\color{codepurple},
-	basicstyle=\ttfamily\footnotesize,
+	basicstyle=\ttfamily\normalsize,
 	breakatwhitespace=false,         
 	breaklines=true,                 
 	captionpos=b,                    
@@ -83,15 +84,23 @@
 \vfill
 
 \section{Introduzione}
-Il sistema progettato ha come scopo quello di ricevere in ingresso dei valori interi positivi, valutare la loro attendibilità e generare, in modo coerente con il valore letto, un ulteriore valore numerico che possa descriverne la credibilità. Si pensi, ad esempio, ad un sistema che opera in questo modo:
+Il componente progettato ha come scopo quello di ricevere in input degli interi positivi, valutarne la loro attendibilità seguendo le regole riportate nei punti sottostanti e generare, in modo coerente con il dato numerico analizzato, un valore intero che possa descriverne la credibilità. Si pensi, ad esempio, ad un sistema che opera in questo modo:
 \begin{enumerate}
-	\item Un sensore effettua una serie di misurazioni: sia $K$ il numero di misurazioni effettuate.
-	\item Le $K$ misurazioni vengono mantenute in delle celle di memoria. Sia W il contenuto di ciascuna cella di memoria rappresentante una misurazione.
-	\item Per ciascuna delle $K$ misurazioni si vuole dire se il valore memorizzato è attendibile oppure no. Si considerano attendibili valori di $W>0$ e non attendibili valori di $W=0$.
-	\item Quindi, per ciascuna misurazione, si assegna un valore di credibilità $C$ secondo queste regole:
+	\item Un sensore $S$ effettua una serie di misurazioni: sia $K$ il numero di misurazioni effettuate.
+	\item Le $K$ misurazioni sono memorizzate in delle celle di memoria. Sia $W$  il contenuto di ciascuna cella di memoria rappresentante una misurazione.
+	\item Per ciascuna delle $K$ misurazioni si vuole stabilire se il valore memorizzato è attendibile oppure no. Si considerano attendibili valori di $W>0$ e non attendibili valori di $W=0$.
+	\item Per fare ciò, per ciascuna misurazione $W_i$ salvata in una cella di memoria $ADD_i$, si assegna un valore di credibilità $C_i$, memorizzandolo nella cella successiva, $ADD_{i+1}$, seguendo queste regole:
 	\begin{enumerate}
-		\item Se $W_i \neq 0$, il corrispondente valore di credibilità $C_i$ sarà massimo, cioè $C_i = 31$
-		\item Se $W_i = 0$, la misurazione è da considerarsi non valida. Si sostituisce quindi il valore di $W_i$ con quello di $W_{i-1}$ e si pone $C_i$ a $C_{i-1} - 1$, se $C_{i-1} \geq 1$ altrimenti si pone $C_i = 0$. Se già il primo valore letto è nullo, cioè $W_0 = 0$, non si può «\textit{correggere}» con la lettura precedente e si mantengono $W_0= 0$ e  $C_0 = 0$.
+		\item Se $W_i > 0$, il corrispondente valore di credibilità $C_i$ sarà massimo, cioè $C_i = 31$
+		\item Se $W_i = 0$, la misurazione è da considerarsi non valida. Si sostituisce quindi il valore di $W_i$ con $W_{i-1}$ e si pone:
+		\begin{equation*}
+			C_i =
+			\begin{cases} 
+				C_{i-1}, & \mbox{se } C_{i-1} \geq 1 \\ 
+				0, & \mbox{se } C_{i-1} = 0
+			\end{cases}
+		\end{equation*}
+			 Nel caso in cui si stia elaborando il primo valore della sequenze e perciò $W_{i-1}$ e $C_{i-1}$ non sono definiti, non si può effettuare la «\textit{correzione}» appena descritta e, di conseguenza, si mantengono $W_0= 0$ e  $C_0 = 0$.
 	\end{enumerate}
 \end{enumerate}
 Il seguente schema esplicita in modo generale il principio di funzionamento del sistema e dove si colloca il componente progettato.
@@ -104,11 +113,11 @@ Il seguente schema esplicita in modo generale il principio di funzionamento del 
 	\node[ram, right of=S] (RAM) {Memoria};
 	\node[component, right of=RAM](C) {Componente progettato};
 	\path[-latex, black] (S) edge[] node {Misurazioni effettuate} (RAM);
-	\path[-latex, black] (RAM) edge[bend right] node[swap]{Misurazioni memorizzate} (C);
 	\path[-latex, black] (C) edge[bend right] node[swap] {Dati elaborati} (RAM);
+	\path[-latex, black] (RAM) edge[bend right] node[swap]{Misurazioni} (C);
 \end{tikzpicture}
 \end{center}
-Un esempio di elaborazione, con valori numerici, che racchiude le casistiche di input descritte è il seguente: 
+Un esempio di elaborazione, con valori numerici, che racchiude le casistiche di input descritte nell'introduzione è il seguente: 
 \begin{table}[h]
 	\centering
 	\begin{tabular}{c|c||c}
@@ -134,8 +143,7 @@ Un esempio di elaborazione, con valori numerici, che racchiude le casistiche di 
 	\path[-latex, black] (C) edge[bend right] node[swap] {$W_{ADD1}=0,\quad C_{ADD2}=0$} (RAM);
 \end{tikzpicture}
 \end{center}
-Leggo 0 dalla memoria. Si tratta del primo valore letto, quindi non posso «correggerlo» con quello letto al passo precedente.
-\clearpage
+Viene letto $W_{ADD_1}=0$ dalla memoria. Si tratta di un valore nullo ed è il primo della sequenza, quindi non può essere «corretto» con il valore all'indirizzo precedente. Il componente mantiene quindi $W_{ADD_1}=0$ e pone $C_{ADD_2}=0$.
 \paragraph{Passo 2:} Elaborazione del secondo valore
 \begin{center}
 \begin{tikzpicture}[
@@ -147,7 +155,7 @@ Leggo 0 dalla memoria. Si tratta del primo valore letto, quindi non posso «corr
 	\path[-latex, black] (C) edge[bend right] node[swap] {$W_{ADD3}=192,\quad C_{ADD4}=31$} (RAM);
 \end{tikzpicture}
 \end{center}
-Leggo 192 dalla memoria. Si tratta di un valore maggiore di 0, quindi lo considero attendibile e imposto al massimo il valore di credibilità $C=31$.
+Viene letto $W_{ADD_3}=192$ dalla memoria. Si tratta di un valore non nullo. Il componente mantiene quindi $W_{ADD_3}=192$ e pone $C_{ADD_4}=31$.
 \paragraph{Passo 3:} Elaborazione del terzo valore
 \begin{center}
 \begin{tikzpicture}[
@@ -159,24 +167,24 @@ Leggo 192 dalla memoria. Si tratta di un valore maggiore di 0, quindi lo conside
 	\path[-latex, black] (C) edge[bend right] node[swap] {$W_{ADD5}=192,\quad C_{ADD6}=30$} (RAM);
 \end{tikzpicture}
 \end{center}
-Leggo 0 dalla memoria. Non si tratta del primo valore letto, quindi non lo considero attendibile e riscrvo in memoria il valore di $W$ letto al punto precedente, ma abbasso il livello di credibilità: $C=30$.
+Viene letto $W_{ADD_5}=0$ dalla memoria. Si tratta di un valore nullo, ma non è il primo della sequenza, quindi può essere «corretto» con il valore all'indirizzo precedente. Il componente pone quindi $W_{ADD_5}=W_{ADD_3} = 192$ e pone $C_{ADD_6}=C_{ADD_4}-1=30$.
 \\
 \\
-I valori numerici di questo esempio sono coerenti con le specifiche: $K$, cioè il numero di letture che il componente deve effettuare, è esprimibile con 10 bit, $W$, il dato in memoria, è una parola da 8 bit e gli indirizzi di memoria sono da 16 bit.
+I valori numerici di questo esempio sono coerenti con le specifiche: $K$, cioè il numero di letture che il componente deve effettuare, è esprimibile con 10 bit. $W$, il dato in memoria, è una parola da 8 bit e gli indirizzi di memoria sono da 16 bit.
 \section{Architettura}
-Il componente progettato, mostrato in Figura \ref{schema_blocchi} è stato suddiviso in dei sottoblocchi funzionali, ognuno con un compito diverso:
+Il componente progettato, mostrato in Figura \ref{schema_blocchi}, è stato suddiviso in dei sottoblocchi funzionali, ognuno con un compito diverso:
 \begin{figure}[h]
 	\includegraphics[scale=0.35]{schema_rete}
 	\caption{Schema a blocchi del componente progettato}
 	\label{schema_blocchi}
 \end{figure}
 \begin{itemize}
-	\item \textbf{ADDR-REG}, è un registro mantiene indica l'indirizzo della cella di memoria sulla quale effettuare le operazioni di lettura e scrittura;
-	\item \textbf{K-VAL-REG}, è un registro che viene inizializzato con il valore $K$ fornito in ingresso. Indica cioè il numero di operazioni di lettura e scrittura ancora da effettuare;
-	\item \textbf{W-REG}, è un insieme di due registri che mantengono memorizzate, rispettivamente, la parola $W$ e la credibilità $C$;
-	\item \textbf{FSM}, è la macchina a stati che funziona da unità di controllo. Abilita e disabilita le uscite (\textit{e di conseguenza i rispettivi ingressi degli altri componenti}) in funzione dello stato in cui si trova. La descrizione degli stati e dei segnali di uscita è riportata 
+	\item \textbf{ADDR\_REG}, è un registro che mantiene memorizzato l'indirizzo della cella di memoria sulla quale effettuare le operazioni di lettura e/o scrittura.
+	\item \textbf{K\_VAL\_REG}, è un registro che viene inizializzato con il valore $K$ fornito in ingresso. Indica quante elaborazioni devono ancora essere effettuate.
+	\item \textbf{W\_REG}, è un insieme di due registri che mantengono memorizzati, rispettivamente, la parola $W$ e la credibilità $C$ correnti.
+	\item \textbf{FSM}, è la macchina a stati che funziona da unità di controllo. Abilita e disabilita le uscite (\textit{e di conseguenza i rispettivi ingressi degli altri componenti}) in funzione dello stato in cui si trova. La descrizione degli stati e dei segnali di uscita è riportata in sezione 2.2.
 \end{itemize}
-Nello schema è presente anche un \textbf{multiplexer}, necessario per portare in uscita il valore di $W$ o di $C$.
+Nello schema è presente anche un \textbf{multiplexer}, necessario per portare in uscita il valore di $W$ o di $C$ in base alla necessità di scrittura.
 \subsection{Implementazione in VHDL}
 La struttura appena descritta, e riportata in Figura \ref{schema_blocchi} è stata anche mappata nel codice VHDL, di cui si riportano le entity:
 \begin{lstlisting}[language=vhdl]
@@ -191,7 +199,7 @@ entity addr_reg is
 	);
 end entity addr_reg;
 \end{lstlisting}
-In cui, \lstinline[style=vhdl]|i_addr| è un vettore di bit inizializzato con il primo indirizzo di memoria dal quale iniziare l'elaborazione e \lstinline[style=vhdl]|o_mem_addr| è l'indirizzo corrente e indica qual è la cella di memoria da leggere o scrivere ; viene di volta in volta incrementato (avendo definito un opportuno segnale nell'architettura, dato che essendo \lstinline[style=vhdl]|o_mem_addr| un output non può essere scritto).
+In cui, \lstinline[style=vhdl]|i_addr| è un vettore inizializzato con il primo indirizzo di memoria dal quale iniziare l'elaborazione e \lstinline[style=vhdl]|o_mem_addr| è l'indirizzo corrente che indica qual è la cella di memoria da leggere o scrivere; viene di volta in volta incrementato (avendo definito un opportuno \lstinline[style=vhdl]|signal| nell'architettura relativa a questa \lstinline[style=vhdl]|entity|, dato che \lstinline[style=vhdl]|o_mem_addr| è un output e non può essere sovrascritto).
 \begin{lstlisting}[language=vhdl]
 entity k_val_reg is
 	port(
@@ -204,7 +212,7 @@ entity k_val_reg is
 	);
 end entity k_val_reg
 \end{lstlisting}
-In cui,  \lstinline[style=vhdl]|i_k| è un vettore di bit inizializzato con la lunghezza $K$ della sequenza da elaborare.  \lstinline[style=vhdl]|o_k_val| è invece il valore corrente di $K$, che viene decrementato al termine di ogni elaborazione fino a diventare zero. Anche in questo caso, nell'architettura è stato introdotto un apposito segnale che permette la riscrittura di $K$.
+In cui,  \lstinline[style=vhdl]|i_k| è un vettore inizializzato con la lunghezza $K$ della sequenza da elaborare e \lstinline[style=vhdl]|o_k_val| è il valore corrente di $K$ (indica cioè quanti valori devono ancora essere elaborati), che viene decrementato al termine di ogni elaborazione fino a diventare zero. Anche in questo caso, nell'architettura è stato introdotto un apposito \lstinline[style=vhdl]|signal| che permette la riscrittura di $K$.
 \begin{lstlisting}[language=vhdl]
 entity w_reg is
 	port(
@@ -218,7 +226,7 @@ entity w_reg is
 	);
 end entity w_reg;
 \end{lstlisting}
-In cui, \lstinline[style=vhdl]|i_mem_data| è il vettore di 8 bit con il dato proveniente dalla memoria e che deve essere elaborato secondo i requisiti di funzionamento specificati nell'introduzione. \lstinline[style=vhdl]|out_w| e  \lstinline[style=vhdl]|out_c| sono i due vettori post-elaborazione, rispettivamente da 8 e 5 bit, e che devono essere scritti in memoria. Anche in questo caso, nell'architettura è stato introdotto un apposito segnale che permette la riscrittura di tali output.
+In cui, \lstinline[style=vhdl]|i_mem_data| è il vettore di 8 bit contentnte il dato proveniente dalla memoria e che deve essere elaborato secondo i requisiti di funzionamento specificati nell'introduzione. \lstinline[style=vhdl]|out_w| e  \lstinline[style=vhdl]|out_c| sono i due vettori contententi i valori post-elaborazione, rispettivamente da 8 e 5 bit, e che devono essere scritti in memoria. Anche in questo caso, nell'architettura sono stati definiti due appositi \lstinline[style=vhdl]|signal| per permettere la riscrittura di tali output.
 \begin{lstlisting}[language=vhdl]
 entity mux is
 	port(
@@ -232,17 +240,23 @@ entity mux is
 	);
 end entity mux;
 \end{lstlisting}
-In cui, \lstinline[style=vhdl]|in_w| e \lstinline[style=vhdl]|in_c| sono i segnali provenienti dal blocco W-REG e \lstinline[style=vhdl]|o_mem_data| è il vettore da 8 bit che deve essere scritto in memoria assumendo, alternativamente, un valore di $W$ o di $C$. Nel secondo caso, il multiplexer si occupa anche di fare un'operazione di padding per portare \lstinline[style=vhdl]|in_c|, vettore da 5 bit, su \lstinline[style=vhdl]|o_mem_data|, vettore da 8 bit.
+In cui, \lstinline[style=vhdl]|in_w| e \lstinline[style=vhdl]|in_c| sono i segnali provenienti dal blocco W\_REG e \lstinline[style=vhdl]|o_mem_data| è il vettore da 8 bit che deve essere scritto in memoria assumendo, alternativamente, il valore di $W$ o di $C$. Nel secondo caso, il multiplexer si occupa anche di fare un'operazione di padding per portare \lstinline[style=vhdl]|in_c|, vettore da 5 bit, su \lstinline[style=vhdl]|o_mem_data|, vettore da 8 bit.
 \paragraph{}
-Tutte le architetture di questi quattro componenti sono formate da un unico process che ha i soli segnali di clock e di reset nella sensitivity list. L'architettura della macchina a stati, descritta nel seguito, è invece formata da due process differenti:
+Tutte le architetture di questi quattro componenti sono formate da un unico \lstinline[style=vhdl]|process| che ha i soli segnali di clock e reset nella sensitivity list. L'architettura della macchina a stati, descritta nel seguito, è invece formata da due \lstinline[style=vhdl]|process| differenti:
 \begin{itemize}
-	\item Un process che descrive la \textbf{funzione di stato prossimo}, sequenziale, e ha nella sensitivity list i segnali di clock e di reset;
-	\item Un pocess che descrive la \textbf{funzione di uscita}, combinatorio, e ha nella sensitity list il segnale di stato corrente.
+	\item Un \lstinline[style=vhdl]|process| che descrive la \textbf{funzione di stato prossimo}, sequenziale, e ha nella sensitivity list i segnali di clock e reset;
+	\item Un \lstinline[style=vhdl]|process| che descrive la \textbf{funzione di uscita}, combinatoria, e ha nella sensitity list il segnale di stato corrente.
 \end{itemize}
 \subsection{Macchina a stati finiti}
-Omettendo di riportare il codice VHDL della entity dell'FSM, di seguito è invece schematizzato il comportamento di transizione tra i diversi stati della macchina:
+Omettendo il codice VHDL della entity dell'FSM, in Figura \ref{fsm} è invece schematizzato il comportamento di transizione tra i diversi stati della macchina, da cui si possono individuare alcune macro-aree che racchiudono parte degli stati:
+\begin{itemize}
+	\item \textbf{Preparazione} del componente, conentente gli stati di INIT e di READY. In questi stati l'elaborazione vera e propria non è ancora iniziata, ma vengono gestiti gli opportuni segnali per poter proseguire nell'elaborazione.
+	\item \textbf{Lettura}, conentente lo stato di MEM\_READ.
+	\item \textbf{Aggiornamento}, conenente i quattro stati che si occupano di elaborare ciò che è stato letto dalla memoria e scriverne i corretti valori.
+	\item \textbf{Termine} dell'elaborazione, conenente lo stato di DONE.
+\end{itemize}
 \begin{figure}[h]
-	\begin{tikzpicture}[thick, scale=0.6, every node/.style={scale=0.6}]
+	\begin{tikzpicture}[thick, scale=0.55,every node/.style={scale=0.55}]
 		\node[state] (s0) {INIT};
 		\node[state, right of=s0] (s1) {READY};
 		\node[state, right of=s1] (s2) {MEM-READ};
@@ -266,15 +280,9 @@ Omettendo di riportare il codice VHDL della entity dell'FSM, di seguito è invec
 		(s7) edge node[left] {START=0} (s1)
 		;
 	\end{tikzpicture}
+	\caption{Macchina a stati finiti}
+	\label{fsm}
 \end{figure}
-\\
-Si possono individuare alcune macro-aree che racchiudono parte degli stati:
-\begin{itemize}
-	\item \textbf{Preparazione} del componente, conentente gli stati di INIT e di READY. In questi stati l'elaborazione vera e propria non è ancora iniziata, ma vengono gestiti gli opportuni segnali per poter proseguire nell'elaborazione.;
-	\item \textbf{Lettura}, conentente lo stato di MEM\_READ;
-	\item \textbf{Aggiornamento}, conenente i quattro stati che si occupano di elaborare ciò che è stato letto dalla memoria e scrivere i corretti valori.
-	\item \textbf{Termine} dell'elaborazione, conenente lo stato di DONE.
-\end{itemize}
 Essendo una macchina di Moore, a ciascuno stato sono anche specificate delle uscite. Per una migliore leggibilità, il valore delle uscite è riportato in Tabella \ref{uscite_fsm}.
 \begin{table}[h]
 	\centering
@@ -294,9 +302,9 @@ Essendo una macchina di Moore, a ciascuno stato sono anche specificate delle usc
 		\textbf{READY}               & 0                                              & 0                                                 & 0                                                  & 0                                                   & 1                                                 & 0                                                & 1                                                   & 0                                                  & 0                                                 & 0                                                 & 1                                                    \\
 		\textbf{MEM\_READ}           & 0                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 1                                                 & 0                                                 & 0                                                    \\
 		\textbf{W\_MEM\_PREP}        & 0                                              & 0                                                 & 0                                                  & 1                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    \\
-		\textbf{UPDATE\_W}           & 0                                              & 1                                                 & 1                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    \\
+		\textbf{W\_UPDATE}           & 0                                              & 1                                                 & 1                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    \\
 		\textbf{C\_MEM\_PREP}        & 0                                              & 1                                                 & 0                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 1                                                  & 1                                                 & 1                                                 & 0                                                    \\
-		\textbf{UPDATE\_C}           & 0                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 1                                                & 0                                                   & 1                                                  & 1                                                 & 1                                                 & 0                                                    \\
+		\textbf{C\_UPDATE}           & 0                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 1                                                & 0                                                   & 1                                                  & 1                                                 & 1                                                 & 0                                                    \\
 		\textbf{DONE}                & 1                                              & 0                                                 & 0                                                  & 0                                                   & 0                                                 & 0                                                & 0                                                   & 0                                                  & 0                                                 & 0                                                 & 0                                                    
 	\end{tblr}
 	\caption{Uscite per ciascuno stato della FSM}
@@ -307,26 +315,26 @@ Di seguito sono invece descritti i vari stati:
 \subsubsection{INIT}
 Lo stato di INIT è quello che il componente raggiunge non appena viene dato il segnale di reset. Sarà quindi lo stato iniziale della prima elaborazione.
 \subsubsection{READY}
-Lo stato di READY si raggiunge non appena il segnale di reset viene portato a zero. Rappresenta lo stato in cui la macchina è in attesa del segnale alto di start, per poter iniziare l'elaborazione. Mentre il componente è in questo stato, inoltre, inizia la lettura dei valori di $K$ e dell'indirizzo iniziale di memoria. Infine, da questo stato, viene abilitato il segnale per l'inizializzazione del registro W\_REG.
-\subsubsection{UPDATE\_W}
-Lo stato di UPDATE\_W abilita il processo di aggiornamento del valore di $W$ che dovrà essere scritto in memoria. Le uscite permettono quindi di portare su o\_mem\_data, (abilitando il multiplexer), al colpo di clock successivo, il nuovo valore di $W$ da  scrivere in memoria .
-\subsubsection{C\_MEM\_PREP}
-Lo stato di C\_MEM\_PREP abilita le uscite per poter scrivere in memoria il valore appena portato su o\_mem\_data. Contestualmente, attiva anche il segnale per abilitare l'incremento dell'indirizzo (dato che la credibilità, al passo successivo, andrà scritta nell'indirizzo successivo) e per portare su o\_mem\_data il nuovo valore di credibilità memorizzato in W-REG.
-\subsubsection{C\_UPDATE}
-Lo stato di C\_UPDATE abilita le uscite per poter scrivere in memoria il valore della credibilità appena portato su o\_mem\_data. Contestualmente, abilita anche l'incremento dell'indirizzo per la successiva scrittura ed abilita il decremento di K, dato che questa elaborazione si è conclusa.
+Lo stato di READY si raggiunge non appena il segnale di reset viene portato a zero. Rappresenta lo stato in cui la macchina è in attesa del segnale alto di start, per poter iniziare l'elaborazione. Mentre il componente è in questo stato, inoltre, inizia la lettura di $K$ e dell'indirizzo iniziale di memoria (sono infatti abilitate le uscite \lstinline[style=vhdl]|o_k_read| e \lstinline[style=vhdl]|o_add_read|). Infine, in questo stato, viene abilitata l'uscita \lstinline[style=vhdl]|o_first_val| per l'inizializzazione del registro W\_REG che pone a 0 i valori di $W$ e di $C$.
 \subsubsection{MEM\_READ}
-Lo stato di MEM\_READ valuta il valore di $K$ per capire se bisogna continuare con l'elaborazione. Contestualmente, abilita l'uscita per la lettura della memoria (preparandosi quindi a ricevere il nuovo valore da elaborare).
+Lo stato di MEM\_READ valuta il valore di $K$ per capire se bisogna continuare con l'elaborazione oppure terminare nello stato di DONE. Contestualmente, abilita l'uscita \lstinline[style=vhdl]|o_en_mem| per la lettura della memoria (preparandosi quindi a ricevere il nuovo valore da elaborare).
 \subsubsection{W\_MEM\_PREP}
-Lo stato di W\_MEM\_PREP si raggiunge se $K > 0$.  Abilita l'uscita o\_w\_update per consentire al componente di valutare il valore di $W$.
+Lo stato di W\_MEM\_PREP si raggiunge se $K > 0$.  In questo stato viene abilitata l'uscita \lstinline[style=vhdl]|o_w_update| per consentire al componente di valutare, ed eventualmente aggiornare, il valore di $W$.
+\subsubsection{W\_UPDATE}
+Lo stato di W\_UPDATE fa terminare il processo di aggiornamento del valore di $W$ che dovrà essere scritto in memoria abilitando le uscite della macchina a stati \lstinline[style=vhdl]|o_en_mux| e \lstinline[style=vhdl]|o_sel_mux|  per permettere di portare su \lstinline[style=vhdl]|o_mem_data|, al colpo di clock successivo, il nuovo valore di $W$ da scrivere in memoria .
+\subsubsection{C\_MEM\_PREP}
+Lo stato di C\_MEM\_PREP abilita le uscite \lstinline[style=vhdl]|o_en_mem| e \lstinline[style=vhdl]|o_mem_wr| per poter scrivere in memoria il valore appena portato su \lstinline[style=vhdl]|o_mem_data|. Contestualmente, attiva anche l'uscita \lstinline[style=vhdl]|o_add_inc| per poter incrementare l'indirizzo corrente e l'uscita \lstinline[style=vhdl]|o_en_mux| per portare su \lstinline[style=vhdl]|o_mem_data| il nuovo valore di credibilità memorizzato in W\_REG.
+\subsubsection{C\_UPDATE}
+Lo stato di C\_UPDATE abilita le uscite \lstinline[style=vhdl]|o_en_mem| e \lstinline[style=vhdl]|o_mem_wr| per poter scrivere in memoria il valore della credibilità appena portato su \lstinline[style=vhdl]|o_mem_data|. Contestualmente, abilita l'uscita \lstinline[style=vhdl]|o_add_inc| per l'incremento dell'indirizzo in vista della successiva lettura e \lstinline[style=vhdl]|o_k_dec| per il decremento di $K$, dato che l'elaborazione di questa coppia di valori si è conclusa.
 \subsubsection{DONE}
-Lo stato di DONE si raggiunge quando $K = 0$, cioè quando l'elaborazione è terminata. Si rimane in questo stato fino a che start rimane alto. Non appena start viene portato a 0, la macchina torna di nuovo in uno stato di READY.
+Lo stato di DONE si raggiunge quando $K = 0$, cioè quando l'elaborazione è terminata. Perciò viene abilitata l'uscita \lstinline[style=vhdl]|o_done|. Si resta in questo stato fino a che \lstinline[style=vhdl]|start| rimane alto. Non appena \lstinline[style=vhdl]|start| viene portato a 0, la macchina torna di nuovo in uno stato di READY.
 \section{Risultati sperimentali}
 Per testare il componente progettato, come primo passo, è stato sottoposto al testbench fornito insieme alla specifica. Completata correttamente la sintesi e terminate le due simulazioni, behavioral e post-syntesis sono stati generati i \lstinline|report_timing| e \lstinline|report_utilization| con i seguenti risultati:
 \begin{itemize}
 	\item \lstinline|Slack (MET):	16.162ns  (required time - arrival time)|. Sono quindi stati rispettati i vincoli temporali imposti dalla specifica.
 	\item \lstinline|Register as Flip Flop: 50|, \lstinline|Register as Latch: 0|. Da cui si nota che sono stati utilizzati 50 flip-flop e nessun latch. Dallo stesso report si può anche vedere il numero di look-up table utilizzate, in questo caso 52.
 \end{itemize}
-Una volta terminata senza errori la simulazione del testbench fornito, il secondo passo è stato quello di ricostruire i testbench sulla base degli esempi dello stato della memoria presenti nel file delle specifiche. Come terzo passo nella fase di test sono stati individuati dei casi limite legati sia ai valori assumibili dai vari segnali, sia al comportamento del componente ed infine, come ultimo controllo, sono state generate, tramite un apposito script, 100 sequenze di valori pseudo-casuali in cui la propabilità di generare il valore 0 era maggiore degli altri interi così da verificare più approfonditamente il comportamento del componente.
+Una volta terminata senza errori la simulazione del testbench fornito, il secondo passo è stato quello di ricostruire i testbench sulla base degli esempi dello stato della memoria presenti nel file delle specifiche. Come terzo passo nella fase di test sono stati individuati dei casi limite legati sia ai valori assumibili dai vari segnali, sia al comportamento del componente. Infine, come ultimo controllo, sono state generate, tramite un apposito script, 100 sequenze di valori pseudo-casuali in cui la probabilità di generare il valore 0 è maggiore degli altri interi così da verificare più approfonditamente il comportamento del componente.
 \paragraph{}
 Di seguito, per ciascun test effettuato, sono descritte le peculiarità che hanno portato alla scelta di sottoporre il componente a tale test.
 \subsection{Test basati sugli esempi delle specifiche}
@@ -345,37 +353,37 @@ Di seguito, per ciascun test effettuato, sono descritte le peculiarità che hann
 \subsubsection{Esempio 3}
 \begin{itemize}
 	\item $K=33$ elaborazioni da eseguire
-	\item Primo valore nullo. Il test va quindi a verificare che, letto il primo 0, il valore che viene scritto in memoria sia 0 sia per la parola $W$, sia per la credibilità.
+	\item Primo valore nullo. Il test va quindi a verificare che, letto il primo 0, il valore che viene scritto in memoria sia 0 sia per la parola $W$, sia per la credibilità $C$.
 	\item Presenza di valori nulli interni alla sequenza
 \end{itemize}
 \subsection{Test su casi limite - valori}
-\subsubsection{Test 1}
+\subsubsection{Test 1: valori massimi}
 \begin{itemize}
 	\item $K=10$ elaborazioni da eseguire
 	\item Primo valore non nullo
 	\item Non ci sono valori nulli interni alla sequenza
 \end{itemize}
 L'obiettivo di questo test è quello di verificare che il comportamento del componente si mantenga corretto qualora i valori di $W$ siano tutti massimi, ovvero in memoria ci siano solo valori pari a 255.
-\subsubsection{Test 2}
+\subsubsection{Test 2: valori minimi}
 \begin{itemize}
 	\item $K=32$ elaborazioni da eseguire
 	\item Primo valore nullo
 	\item Presenza di valori nulli interni alla sequenza
 \end{itemize}
 L'obiettivo di questo test è quello di verificare che il comportamento del componente si mantenga corretto qualora i valori di $W$ siano tutti minimi, ovvero in memoria ci siano solo valori pari a 0.
-\subsubsection{Test 3}
+\subsubsection{Test 3: valore minimo di elaborazioni da eseguire}
 \begin{itemize}
 	\item $K=1$ elaborazioni da eseguire
 	\item Valore non nullo
 \end{itemize}
 L'obiettivo di questo test è quello di verificare che il comportamento del componente si mantenga corretto qualora il numero di elaborazioni da eseguire sia minimo, ovvero $K=1$.
-\subsubsection{Test 4}
+\subsubsection{Test 4: valore massimo di elaborazioni da eseguire}
 \begin{itemize}
 	\item $K=1023$ elaborazioni da eseguire
 	\item Valori della sequenza generati in modo pseudo-casuale
 \end{itemize}
 L'obiettivo di questo test è quello di verificare che il comportamento del componente si mantenga corretto qualora il numero di elaborazioni da eseguire sia massimo, ovvero $K=1023$.
-\subsubsection{Test 5}
+\subsubsection{Test 5: indirizzo di partenza uguale a 0}
 \begin{itemize}
 	\item $K=10$
 	\item Indirizzo di partenza $ADD=0$
@@ -383,32 +391,26 @@ L'obiettivo di questo test è quello di verificare che il comportamento del comp
 \end{itemize}
 L'obiettivo di questo test è quello di verificare che il comportamento del componente si mantenga corretto qualora l'indirizzo di partenza da cui partire con l'elaborazione sia 0.
 \subsection{Test su casi limite - comportamenti}
-\subsubsection{Test 1}
+\subsubsection{Test 1: più segnali di start senza dare il reset}
 \begin{itemize}
 	\item Più segnali di start forniti
 	\item Indirizzi di partenza uguali per due sequenze
 	\item Valori delle sequenze generati in modo pseudo-casuale
 \end{itemize}
-Obiettivo di questo test è quello di permettere al componente di effettuare più elaborazioni senza passare dallo stato di reset, se non per la prima sequenza. Il componente devi quindi completare le elaborazioni di tutte le sequenze.
-\subsubsection{Test 2}
+Obiettivo di questo test è quello di permettere al componente di effettuare più elaborazioni senza passare dallo stato di reset, se non per la prima sequenza. Il componente devi quindi completare le elaborazioni di tutte le sequenze. Inoltre, due sequenze partono dallo stesso indirizzo di memoria e, perciò, il componente deve comportarsi correttamente sovrascrivendo valori già elaborati.
+\subsubsection{Test 2: reset durante l'elaborazione}
 \begin{itemize}
 	\item Più segnali di start forniti
 	\item Segnale di reset fornito durante una elaborazione
 	\item Valori delle sequenze generati in modo pseudo-casuale
 \end{itemize}
-Obiettivo di questo test è quello di permettere al componente di effettuare più elaborazioni e, durante una elaborazione viene fornito il segnale di reset.
-\subsubsection{Test 3}
+Obiettivo di questo test è quello di permettere al componente di effettuare più elaborazioni. Durante una elaborazione viene fornito il segnale di reset e il componente deve interrompere l'elaborazione tornando nello stato di INIT fino a che il reset viene portato a 0.
+\subsubsection{Test 3: start durante il reset}
 \begin{itemize}
 	\item Segnale di start e di reset contemporaneamente alti
 	\item Valori delle sequenze generati in modo pseudo-casuale
 \end{itemize}
 Obiettivo di questo test è quello di verificare che, mentre il segnale di reset è alto, nel caso in cui venga fornito il segnale di start, il componente non inizi l'elaborazione ma rimanga in uno stato di reset.
-\subsubsection{Test 4}
-\begin{itemize}
-	\item Più segnali di reset forniti
-	\item Valori delle sequenze generati in modo pseudo-casuale
-\end{itemize}
-Obiettivo di questo test è quello di verificare che il compoente si comporti in modo corretto qualora vengano forniti segnali di reset in diversi stati dell'elaborazione (durante l'elaborazione, come per il test 2 e post-elaborazione).
 \section{Conclusioni}
 Il componente progettato soddisfa i requisti temporali imposti dalle specifiche e simula correttamente i casi di test sopra elencati, sia in behavioral che in post-sintesi. 
 \paragraph{}
