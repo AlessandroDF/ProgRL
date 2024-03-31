@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.9)  31 MAR 2024 12:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.9)  31 MAR 2024 15:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -913,13 +913,13 @@ File: t1cmtt.fd 2022/07/10 v2.5l Standard LaTeX font definitions
 > Step: build the whole table.
  [6] [7] [8] [9] (./Relazione.aux) ) 
 Here is how much of TeX's memory you used:
- 38421 strings out of 476041
- 952362 string characters out of 5793175
+ 38422 strings out of 476041
+ 952372 string characters out of 5793175
  2000388 words of memory out of 6000000
- 58458 multiletter control sequences out of 15000+600000
+ 58459 multiletter control sequences out of 15000+600000
  525607 words of font info for 52 fonts, out of 8000000 for 9000
  1137 hyphenation exceptions out of 8191
- 99i,11n,111p,685b,1746s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,11n,111p,686b,1746s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/
 public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
@@ -938,7 +938,7 @@ ti1000.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfti1440.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></u
 sr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfxc1440.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/cm-super/sfxc1728.pfb>
-Output written on Relazione.pdf (10 pages, 468368 bytes).
+Output written on Relazione.pdf (10 pages, 468467 bytes).
 PDF statistics:
  145 PDF objects out of 1000 (max. 8388607)
  89 compressed objects within 1 object stream

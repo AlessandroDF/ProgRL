@@ -17,7 +17,7 @@
 \contentsline {subsubsection}{\numberline {2.2.7}C\_UPDATE}{7}{}%
 \contentsline {subsubsection}{\numberline {2.2.8}DONE}{7}{}%
 \contentsline {section}{\numberline {3}Risultati sperimentali}{7}{}%
-\contentsline {paragraph}{}{8}{}%
+\contentsline {paragraph}{}{7}{}%
 \contentsline {subsection}{\numberline {3.1}Test basati sugli esempi delle specifiche}{8}{}%
 \contentsline {subsubsection}{\numberline {3.1.1}Esempi 1, 4, 5}{8}{}%
 \contentsline {subsubsection}{\numberline {3.1.2}Esempio 2}{8}{}%
